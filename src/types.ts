@@ -15,7 +15,17 @@ export interface Topic {
   label: string;
 }
 
-export type QuestionKind = 'choice' | 'trueFalse' | 'fillBlank';
+export type QuestionKind =
+  | 'choice'
+  | 'trueFalse'
+  | 'fillBlank'
+  | 'matching'
+  | 'ordering'
+  | 'compare'
+  | 'classify'
+  | 'errorFind'
+  | 'calculation'
+  | 'analogy';
 
 export interface Question {
   id: string;
@@ -28,7 +38,7 @@ export interface Question {
   kind?: QuestionKind;
 }
 
-export type Screen = 'welcome' | 'test' | 'result' | 'error' | 'drowned';
+export type Screen = 'welcome' | 'test' | 'result' | 'error' | 'drowned' | 'editor';
 
 export type Difficulty = 'easy' | 'normal' | 'hard';
 

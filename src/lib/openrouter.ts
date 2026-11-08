@@ -36,6 +36,11 @@ interface RawQuestion {
   kind?: unknown;
 }
 
+const ALLOWED_KINDS: QuestionKind[] = [
+  'choice', 'trueFalse', 'fillBlank', 'matching', 'ordering',
+  'compare', 'classify', 'errorFind', 'calculation', 'analogy',
+];
+
 function buildPrompt(subject: SubjectId, topicId: string | undefined, count: number): string {
   const topicLabel = topicId
     ? TOPICS[subject]?.find((t: Topic) => t.id === topicId)?.label ?? 'змішана'
@@ -44,11 +49,18 @@ function buildPrompt(subject: SubjectId, topicId: string | undefined, count: num
   const subjectName = SUBJECTS.find((s) => s.id === subject)?.label ?? subject;
 
   return `Ти — дружній AI-репетитор для підготовки до НМТ (український мультимедійний тест).
-Створи ${count} тестових питання з предмету «${subjectName}», тема: «${topicLabel}».
-Змішай формати завдань:
+Створи ${count} тестових питань з предмету «${subjectName}», тема: «${topicLabel}».
+Змішай формати завдань (поле "kind"):
 - choice: 4 варіанти відповіді;
 - trueFalse: твердження, лише 2 варіанти ["Так", "Ні"];
-- fillBlank: речення з пропуском «___» і 4 варіанти слова.
+- fillBlank: речення з пропуском «___» і 4 варіанти слова;
+- matching: зіставляння (4 варіанти пар);
+- ordering: правильна послідовність (4 варіанти послідовностей);
+- compare: порівняння двох величин (2 варіанти);
+- classify: класифікація об'єкта (4 варіанти);
+- errorFind: знайди помилку в тексті (4 варіанти);
+- calculation: обчислення (4 варіанти);
+- analogy: аналогія «A : B = C : ?» (4 варіанти).
 Кожне питання має коротке дружнє пояснення українською простими словами.
 
 Поверни ТІЛЬКИ валідний JSON-масив без markdown-обгорток. Формат кожного елемента:
@@ -59,7 +71,7 @@ function buildPrompt(subject: SubjectId, topicId: string | undefined, count: num
   "correctIndex": 0,
   "explanation": "дружнє пояснення українською"
 }
-Для trueFalse використовуй рівно 2 варіанти. Не пиши жодного тексту поза JSON.`;
+Для trueFalse використовуй рівно 2 варіанти. Для compare — 2 або 4 варіанти. Не пиши жодного тексту поза JSON.`;
 }
 
 function parseQuestions(json: string, subject: SubjectId, topicId: string | undefined): Question[] {
@@ -78,7 +90,9 @@ function parseQuestions(json: string, subject: SubjectId, topicId: string | unde
     const options = Array.isArray(raw.options) ? (raw.options as unknown[]).map(String) : [];
     const correctIndex = Number(raw.correctIndex);
     const explanation = typeof raw.explanation === 'string' ? raw.explanation : '';
-    const kind: QuestionKind = raw.kind === 'trueFalse' || raw.kind === 'fillBlank' ? raw.kind : 'choice';
+    const kind: QuestionKind = ALLOWED_KINDS.includes(raw.kind as QuestionKind)
+    ? (raw.kind as QuestionKind)
+    : 'choice';
     const validOptionCount = kind === 'trueFalse' ? options.length === 2 : options.length === 4;
 
     if (

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import SettingsModal from '@/components/SettingsModal';
 import WelcomeScreen from '@/components/WelcomeScreen';
+import EditorScreen from '@/components/EditorScreen';
 import QuestionCard from '@/components/QuestionCard';
 import ProgressBar from '@/components/ProgressBar';
 import ResultScreen from '@/components/ResultScreen';
@@ -12,6 +13,7 @@ import { fetchQuestions } from '@/lib/openrouter';
 import { getApiKey, getSoundOn, saveSoundOn } from '@/lib/storage';
 import { pickMockQuestions } from '@/data/mockQuestions';
 import { SUBJECTS, type Element } from '@/data/subjects';
+import { CustomSet, decodeSet, upsertSet } from '@/lib/customSets';
 import { playSound, setSoundEnabled, unlockAudio, refreshSfxVolume } from '@/lib/sounds';
 import { playMusic, pauseMusic, unlockMusic } from '@/lib/music';
 import type { Question, Screen, SubjectId, Difficulty } from '@/types';
@@ -30,7 +32,7 @@ const FLOOD_WRONG_PENALTY = FLOOD_MAX_SECONDS * 0.2;
 function App() {
   const [screen, setScreen] = useState<Screen>('welcome');
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [source, setSource] = useState<'openrouter' | 'mock' | null>(null);
+  const [source, setSource] = useState<'openrouter' | 'mock' | 'custom' | null>(null);
 
   // config
   const [subject, setSubject] = useState<SubjectId>('english');
@@ -48,6 +50,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [soundOn, setSoundOn] = useState(getSoundOn);
+  const [editorInitialSet, setEditorInitialSet] = useState<CustomSet | null>(null);
+  const [importedToast, setImportedToast] = useState<string | null>(null);
 
   // flood / air
   const [elapsed, setElapsed] = useState(0); // global elapsed seconds (counts up)
@@ -62,6 +66,25 @@ function App() {
   useEffect(() => {
     setSoundEnabled(soundOn);
   }, [soundOn]);
+
+  // Import a shared set from the URL (?set=...)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get('set');
+      if (!encoded) return;
+      const decoded = decodeSet(encoded);
+      if (!decoded) return;
+      upsertSet(decoded);
+      setImportedToast(`Додано набір «${decoded.title}» з посилання.`);
+      // clean URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('set');
+      window.history.replaceState({}, '', url.toString());
+    } catch {
+      // ignore
+    }
+  }, []);
 
   function toggleSound() {
     setSoundOn((prev) => {
@@ -143,6 +166,23 @@ function App() {
     setTopicId('');
   }
 
+  function beginTest(qs: Question[], src: 'openrouter' | 'mock' | 'custom') {
+    setQuestions(qs);
+    setSource(src);
+    setCurrent(0);
+    setSelected(null);
+    setAnswered(false);
+    setScore(0);
+    setCorrectCount(0);
+    setElapsed(0);
+    setAir(MAX_AIR);
+    setQuestionElapsed(TIME_PER_QUESTION);
+    setScreen('test');
+    playSound('start');
+    playMusic();
+    startTimer();
+  }
+
   async function handleStart() {
     setLoading(true);
     setErrorMsg('');
@@ -152,20 +192,7 @@ function App() {
     try {
       const res = await fetchQuestions(subject, mode === 'sprint' ? undefined : topicId, QUESTION_COUNT, apiKey);
       if (!res.questions.length) throw new Error('Не вдалося згенерувати питання.');
-      setQuestions(res.questions);
-      setSource(res.source);
-      setCurrent(0);
-      setSelected(null);
-      setAnswered(false);
-      setScore(0);
-      setCorrectCount(0);
-      setElapsed(0);
-      setAir(MAX_AIR);
-      setQuestionElapsed(TIME_PER_QUESTION);
-      setScreen('test');
-      playSound('start');
-      playMusic();
-      startTimer();
+      beginTest(res.questions, res.source);
     } catch (err) {
       console.error(err);
       setErrorMsg('Не вдалося завантажити питання. Спробуй локальний режим.');
@@ -173,6 +200,12 @@ function App() {
     } finally {
       setLoading(false);
     }
+  }
+
+  function handlePlayCustom(set: CustomSet) {
+    const firstSubject = (set.questions[0]?.subject as SubjectId) ?? 'english';
+    setSubject(firstSubject);
+    beginTest(set.questions, 'custom');
   }
 
   function handleSelect(index: number) {
@@ -212,36 +245,12 @@ function App() {
 
   function handleRestartLocal() {
     const qs = pickMockQuestions(subject, mode === 'sprint' ? undefined : topicId, QUESTION_COUNT);
-    setQuestions(qs);
-    setSource('mock');
-    setCurrent(0);
-    setSelected(null);
-    setAnswered(false);
-    setScore(0);
-    setCorrectCount(0);
-    setElapsed(0);
-    setAir(MAX_AIR);
-    setQuestionElapsed(TIME_PER_QUESTION);
-    setScreen('test');
-    playSound('start');
-    playMusic();
-    startTimer();
+    beginTest(qs, 'mock');
   }
 
   function handleRetry() {
     if (questions.length) {
-      setCurrent(0);
-      setSelected(null);
-      setAnswered(false);
-      setScore(0);
-      setCorrectCount(0);
-      setElapsed(0);
-      setAir(MAX_AIR);
-      setQuestionElapsed(TIME_PER_QUESTION);
-      setScreen('test');
-      playSound('start');
-      playMusic();
-      startTimer();
+      beginTest(questions, (source as 'openrouter' | 'mock' | 'custom') ?? 'mock');
     } else {
       handleStart();
     }
@@ -253,12 +262,18 @@ function App() {
     setScreen('welcome');
     setSource(null);
     setQuestions([]);
+    setEditorInitialSet(null);
+  }
+
+  function handleOpenEditor(set: CustomSet | null = null) {
+    setEditorInitialSet(set);
+    setScreen('editor');
   }
 
   return (
     <div className="min-h-screen">
       <UnderwaterOverlay active={flooded} />
-      <Header onOpenSettings={() => setSettingsOpen(true)} source={source} soundOn={soundOn} onToggleSound={toggleSound} />
+      <Header onOpenSettings={() => setSettingsOpen(true)} onOpenEditor={() => handleOpenEditor(null)} source={source} soundOn={soundOn} onToggleSound={toggleSound} />
       <SettingsModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
@@ -278,6 +293,7 @@ function App() {
             onTopic={setTopicId}
             onDifficulty={setDifficulty}
             onStart={handleStart}
+            onOpenEditor={() => handleOpenEditor(null)}
           />
         )}
 
@@ -328,7 +344,22 @@ function App() {
             onHome={handleHome}
           />
         )}
+
+        {screen === 'editor' && (
+          <EditorScreen
+            onHome={handleHome}
+            onPlay={handlePlayCustom}
+            initialSet={editorInitialSet}
+          />
+        )}
       </main>
+
+      {importedToast && (
+        <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 animate-slide-up rounded-xl bg-cave-400/95 px-4 py-2.5 text-xs font-bold text-white ring-1 ring-steel-500/60 shadow-lg">
+          {importedToast}
+          <button onClick={() => setImportedToast(null)} className="ml-3 text-steel-100 hover:text-white" aria-label="Закрити">✕</button>
+        </div>
+      )}
 
       <footer className="mx-auto max-w-3xl px-4 pb-6 text-center text-xs text-steel-100/70 sm:px-6">
         NMT FLOOD RUN · втечи від потопу · питання від AI або з вбудованої бази

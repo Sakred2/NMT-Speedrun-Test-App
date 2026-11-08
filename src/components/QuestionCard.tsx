@@ -1,4 +1,4 @@
-import { Lightbulb, ChevronRight, Check, X, CircleHelp, PenLine, ListChecks } from 'lucide-react';
+import { Lightbulb, ChevronRight, Check, X, CircleHelp, PenLine, ListChecks, Link2, ArrowUpDown, Scale, Tag, AlertTriangle, Calculator, Sparkles } from 'lucide-react';
 import type { Question } from '@/types';
 import type { Element } from '@/data/subjects';
 import { ELEMENT_COLOR } from '@/data/subjects';
@@ -29,7 +29,14 @@ export default function QuestionCard({
     choice: { label: 'ОБЕРИ ВІДПОВІДЬ', icon: ListChecks },
     trueFalse: { label: 'ПРАВДА ЧИ НІ?', icon: CircleHelp },
     fillBlank: { label: 'ЗАПОВНИ ПРОПУСК', icon: PenLine },
-  }[kind];
+    matching: { label: 'ЗІСТАВЛЕННЯ', icon: Link2 },
+    ordering: { label: 'ПОСЛІДОВНІСТЬ', icon: ArrowUpDown },
+    compare: { label: 'ПОРІВНЯННЯ', icon: Scale },
+    classify: { label: 'КЛАСИФІКАЦІЯ', icon: Tag },
+    errorFind: { label: 'ЗНАЙДИ ПОМИЛКУ', icon: AlertTriangle },
+    calculation: { label: 'ОБЧИСЛЕННЯ', icon: Calculator },
+    analogy: { label: 'АНАЛОГІЯ', icon: Sparkles },
+  }[kind] ?? { label: 'ОБЕРИ ВІДПОВІДЬ', icon: ListChecks };
   const KindIcon = kindMeta.icon;
   const optionLabels = kind === 'trueFalse' ? ['ТАК', 'НІ'] : LETTERS;
 
@@ -96,7 +103,7 @@ export default function QuestionCard({
           </h2>
 
           {/* answer options — layout adapts to kind */}
-          {kind === 'trueFalse' ? (
+          {kind === 'trueFalse' || (kind === 'compare' && question.options.length === 2) ? (
             <div className="grid grid-cols-2 gap-3 px-1 pb-1">
               {question.options.map((opt, i) => (
                 <button

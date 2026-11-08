@@ -25,7 +25,7 @@ export const SUBJECTS: SubjectExtra[] = [
     accent: 'from-volt to-volt-deep',
   },
   {
-    id: 'math', label: 'Математика', icon: '🪨', element: 'stone', difficulty: 'Insane',
+    id: 'math', label: 'Математика', icon: '📐', element: 'stone', difficulty: 'Insane',
     accent: 'from-steel-200 to-steel-400',
   },
   {

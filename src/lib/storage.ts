@@ -81,7 +81,9 @@ export function saveMusicOn(on: boolean): void {
 
 export function getMusicVolume(): number {
   try {
-    const v = Number(localStorage.getItem(MUSIC_VOL_KEY));
+    const raw = localStorage.getItem(MUSIC_VOL_KEY);
+    if (raw === null) return 35;
+    const v = Number(raw);
     return Number.isFinite(v) && v >= 0 && v <= 100 ? v : 35;
   } catch {
     return 35;
@@ -98,7 +100,9 @@ export function saveMusicVolume(v: number): void {
 
 export function getSfxVolume(): number {
   try {
-    const v = Number(localStorage.getItem(SFX_VOL_KEY));
+    const raw = localStorage.getItem(SFX_VOL_KEY);
+    if (raw === null) return 70;
+    const v = Number(raw);
     return Number.isFinite(v) && v >= 0 && v <= 100 ? v : 70;
   } catch {
     return 70;

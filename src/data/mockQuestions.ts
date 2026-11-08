@@ -63,6 +63,27 @@ export const MOCK_QUESTIONS: Question[] = [
     correctIndex: 2,
     explanation: 'Сонце — унікальний об’єкт, тому перед ним стоїть означений артикль «the»: «the sun».',
   },
+  {
+    id: 'en-9', subject: 'english', topic: 'grammar',
+    prompt: 'Choose the correct comparative form: «This book is ___ than that one.»',
+    options: ['more good', 'better', 'gooder', 'the best'],
+    correctIndex: 1,
+    explanation: 'Вищий ступінь від «good» — неправильна форма «better». «More good» і «gooder» — помилкові, а «the best» — найвищий ступінь.',
+  },
+  {
+    id: 'en-10', subject: 'english', topic: 'vocab',
+    prompt: 'What is the opposite of «expensive»?',
+    options: ['rich', 'costly', 'cheap', 'valuable'],
+    correctIndex: 2,
+    explanation: '«Expensive» — дорогий, тому антонім — «cheap» (дешевий). «Costly» — синонім, «valuable» — цінний.',
+  },
+  {
+    id: 'en-11', subject: 'english', topic: 'prepositions',
+    prompt: 'Choose the right preposition: «She is interested ___ art.»',
+    options: ['on', 'at', 'in', 'for'],
+    correctIndex: 2,
+    explanation: 'Стійкий вираз «be interested in» — цікавитися чимось. Тому правильно: «interested in art».',
+  },
 
   // ───────────── German ─────────────
   {
@@ -121,6 +142,34 @@ export const MOCK_QUESTIONS: Question[] = [
     correctIndex: 1,
     explanation: '«Die Schule» — школа. Магазин — der Laden, робота — die Arbeit, дім — das Haus.',
   },
+  {
+    id: 'de-9', subject: 'german', topic: 'vocab',
+    prompt: 'Що означає «das Fenster»?',
+    options: ['двері', 'вікно', 'стіл', 'стілець'],
+    correctIndex: 1,
+    explanation: '«Das Fenster» — вікно. Двері — die Tür, стіл — der Tisch, стілець — der Stuhl.',
+  },
+  {
+    id: 'de-10', subject: 'german', topic: 'cases',
+    prompt: 'Який відмінок вимагає прийменник «ohne»?',
+    options: ['Nominativ', 'Dativ', 'Genitiv', 'Akkusativ'],
+    correctIndex: 3,
+    explanation: 'Прийменник «ohne» (без) завжди вимагає Akkusativ: «ohne den Freund» (без друга).',
+  },
+  {
+    id: 'de-11', subject: 'german', topic: 'artikel',
+    prompt: 'Виберіть правильний артикль: «___ Frau» (жінка).',
+    options: ['der', 'das', 'die', 'den'],
+    correctIndex: 2,
+    explanation: '«Frau» — жіночого роду, тому артикль «die»: die Frau. У Dativ — der Frau.',
+  },
+  {
+    id: 'de-12', subject: 'german', topic: 'verbs',
+    prompt: 'Виберіть Partizip II дієслова «lesen» (читати).',
+    options: ['liest', 'las', 'gelesen', 'lesen'],
+    correctIndex: 2,
+    explanation: 'Partizip II від «lesen» — «gelesen». Perfekt: «Ich habe das Buch gelesen».',
+  },
 
   // ───────────── Polish ─────────────
   {
@@ -178,6 +227,41 @@ export const MOCK_QUESTIONS: Question[] = [
     options: ['mój', 'moja', 'moje', 'twoje'],
     correctIndex: 0,
     explanation: '«Brat» — чоловічого роду, тож присвійний займенник «mój» (мій). «Moja» — для жіночого, «moje» — для середнього.',
+  },
+  {
+    id: 'pl-9', subject: 'polish', topic: 'vocab',
+    prompt: 'Що означає «książka»?',
+    options: ['ручка', 'зошит', 'книга', 'стіл'],
+    correctIndex: 2,
+    explanation: '«Książka» — книга. Ручка — długopis, зошит — zeszyt, стіл — stół.',
+  },
+  {
+    id: 'pl-10', subject: 'polish', topic: 'pronouns',
+    prompt: 'Який займенник означає «ми»?',
+    options: ['wy', 'oni', 'ja', 'my'],
+    correctIndex: 3,
+    explanation: '«My» — ми. «Wy» — ви, «oni» — вони, «ja» — я.',
+  },
+  {
+    id: 'pl-11', subject: 'polish', topic: 'cases',
+    prompt: 'Який відмінок потрібен після прийменника «z» у значенні «з ким?»',
+    options: ['Mianownik', 'Narzędnik', 'Dopełniacz', 'Biernik'],
+    correctIndex: 1,
+    explanation: '«Z» у значенні «разом із кимось» вимагає Narzędnik (орудний): «z przyjacielem» (з другом).',
+  },
+  {
+    id: 'pl-12', subject: 'polish', topic: 'verbs',
+    prompt: 'Минулий час дієслова «czytać» для «ona»: «Ona ___ książkę».',
+    options: ['czytał', 'czytała', 'czytali', 'czytać'],
+    correctIndex: 1,
+    explanation: 'Для жіночого роду в минулому часі — «czytała»: «Ona czytała książkę». «Czytał» — він, «czytali» — вони.',
+  },
+  {
+    id: 'pl-13', subject: 'polish', topic: 'vocab',
+    prompt: 'Як польською сказати «дякую»?',
+    options: ['przepraszam', 'proszę', 'do widzenia', 'dziękuję'],
+    correctIndex: 3,
+    explanation: '«Dziękuję» — дякую. «Przepraszam» — вибач, «proszę» — прошу/будь ласка, «do widzenia» — до побачення.',
   },
 
   // ───────────── History of Ukraine ─────────────
@@ -415,6 +499,101 @@ export const MOCK_QUESTIONS: Question[] = [
     explanation: 'У реченні «Я знаю, що ти прийдеш» є головна і підрядна частина, з’єднані сполучником «що», тож це складнопідрядне.',
   },
   {
+    id: 'uk-4', subject: 'ukrainian', topic: 'orthography',
+    prompt: 'У якому рядку всі слова написані правильно?',
+    options: [
+      'зїзд, п’ять, бур’ян',
+      'з’їзд, пьять, бур’ян',
+      'з’їзд, п’ять, бур’ян',
+      'з’їзд, п’ять, бурян',
+    ],
+    correctIndex: 2,
+    explanation: 'Апостроф ставимо після б, п, в, м, ф та після префіксів на приголосний: з’їзд, п’ять, бур’ян. Інші варіанти містять помилки.',
+  },
+  {
+    id: 'uk-5', subject: 'ukrainian', topic: 'orthography',
+    prompt: 'Як правильно написати: «___ на дощ, ми пішли гуляти»?',
+    options: ['Не зважаючи', 'Не-зважаючи', 'Незважаючи', 'Ні зважаючи'],
+    correctIndex: 2,
+    explanation: '«Незважаючи на» у значенні «всупереч» пишемо разом. Окремо — «не зважаючи», коли це дієприслівник «не звертаючи уваги».',
+  },
+  {
+    id: 'uk-6', subject: 'ukrainian', topic: 'orthography',
+    prompt: 'У якому слові наголос падає на останній склад?',
+    options: ['новий', 'ручка', 'місто', 'черговий'],
+    correctIndex: 3,
+    explanation: 'Правильно: чергови́й — наголос на «и». У словах «новий», «ручка», «місто» наголос на першому складі.',
+  },
+  {
+    id: 'uk-7', subject: 'ukrainian', topic: 'morphology',
+    prompt: 'Яке зі слів є іменником?',
+    options: ['бігти', 'швидко', 'біг', 'синій'],
+    correctIndex: 2,
+    explanation: '«Біг» відповідає на питання «що?» і означає предмет — це іменник. «Бігти» — дієслово, «швидко» — прислівник, «синій» — прикметник.',
+  },
+  {
+    id: 'uk-8', subject: 'ukrainian', topic: 'morphology',
+    prompt: 'Визначте рід іменника «дівчина».',
+    options: ['чоловічий', 'середній', 'спільний', 'жіночий'],
+    correctIndex: 3,
+    explanation: '«Дівчина» — жіночого роду. Підставляємо «вона»: дівчина прийшла.',
+  },
+  {
+    id: 'uk-9', subject: 'ukrainian', topic: 'morphology',
+    prompt: 'У якому відмінку стоїть слово «книгою»?',
+    options: ['Називний', 'Родовий', 'Місцевий', 'Орудний'],
+    correctIndex: 3,
+    explanation: '«Книгою» відповідає на питання «чим?» — це Орудний відмінок. Називний — книга, родовий — книги, місцевий — на книзі.',
+  },
+  {
+    id: 'uk-10', subject: 'ukrainian', topic: 'syntax',
+    prompt: 'Укажіть підмет у реченні «Діти граються у дворі».',
+    options: ['граються', 'у дворі', 'немає підмета', 'Діти'],
+    correctIndex: 3,
+    explanation: 'Підмет — «Діти» (хто?). Присудок — «граються». «У дворі» — обставина місця.',
+  },
+  {
+    id: 'uk-11', subject: 'ukrainian', topic: 'syntax',
+    prompt: 'Яке речення ускладнене однорідними членами?',
+    options: [
+      'Я знаю, що він прийде.',
+      'Світить сонце.',
+      'На столі лежали яблука, груші та сливи.',
+      'Дощ іде.',
+    ],
+    correctIndex: 2,
+    explanation: 'Однорідні підмети «яблука, груші, сливи» з’єднані сполучником «та». Інші речення прості або складнопідрядні.',
+  },
+  {
+    id: 'uk-12', subject: 'ukrainian', topic: 'stylistics',
+    prompt: 'Який стиль має наукова стаття?',
+    options: ['художній', 'науковий', 'розмовний', 'публіцистичний'],
+    correctIndex: 1,
+    explanation: 'Науковий стиль використовує терміни, точні факти й логічність. Художній — образи, розмовний — невимушеність.',
+  },
+  {
+    id: 'uk-13', subject: 'ukrainian', topic: 'stylistics',
+    prompt: 'У яких документах використовують офіційно-діловий стиль?',
+    options: ['віршах і казках', 'дружніх повідомленнях', 'заявах і договорах', 'рекламних слоганах'],
+    correctIndex: 2,
+    explanation: 'Офіційно-діловий стиль — це заяви, накази, договори, протоколи. Для нього характерні точність і стандартні формулювання.',
+  },
+  {
+    id: 'uk-14', subject: 'ukrainian', topic: 'orthography',
+    prompt: 'Як правильно написати «будь ласка»?',
+    options: ['будь-ласка', 'будьласка', 'будь ласка', 'будь/ласка'],
+    correctIndex: 2,
+    explanation: '«Будь ласка» пишемо окремо. Дефіс тут не потрібен: це сполучення дієслова «будь» і частки «ласка».',
+  },
+  {
+    id: 'uk-15', subject: 'ukrainian', topic: 'morphology',
+    prompt: 'У якому слові є префікс?',
+    options: ['писати', 'писар', 'письмо', 'переписати'],
+    correctIndex: 3,
+    explanation: 'Префікс «пере-» виділяється в слові «переписати». В інших словах цього префікса немає.',
+  },
+
+  {
     id: 'bio-1', subject: 'biology', topic: 'cell',
     prompt: 'Яка органела відповідає за синтез білка?',
     options: ['Мітохондрія', 'Рибосома', 'Лізосома', 'Вакуоля'],
@@ -434,6 +613,90 @@ export const MOCK_QUESTIONS: Question[] = [
     options: ['23', '46', '48', '92'],
     correctIndex: 1,
     explanation: 'У соматичній клітині людини 46 хромосом (23 пари). У статевих клітинах їх уполовину менше: 23.',
+  },
+  {
+    id: 'bio-4', subject: 'biology', topic: 'cell',
+    prompt: 'Яку органелу називають «енергетичною станцією» клітини?',
+    options: ['Рибосому', 'Ядро', 'Мітохондрію', 'Вакуолю'],
+    correctIndex: 2,
+    explanation: 'Мітохондрії виробляють енергію (АТФ) у процесі дихання, тому їх називають енергетичними станціями клітини.',
+  },
+  {
+    id: 'bio-5', subject: 'biology', topic: 'cell',
+    prompt: 'Основна функція клітинної мембрани — ...',
+    options: ['синтез білка', 'зберігання спадкової інформації', 'фотосинтез', 'захист і транспорт речовин'],
+    correctIndex: 3,
+    explanation: 'Мембрана відокремлює клітину від середовища та регулює надходження й вихід речовин.',
+  },
+  {
+    id: 'bio-6', subject: 'biology', topic: 'cell',
+    prompt: 'Що міститься в ядрі клітини?',
+    options: ['травні ферменти', 'спадкова інформація (ДНК)', 'крохмаль', 'кисень'],
+    correctIndex: 1,
+    explanation: 'У ядрі зберігається ДНК — носій спадкової інформації. Ядро керує процесами в клітині.',
+  },
+  {
+    id: 'bio-7', subject: 'biology', topic: 'human',
+    prompt: 'Який орган перекачує кров по організму?',
+    options: ['печінка', 'легені', 'серце', 'нирки'],
+    correctIndex: 2,
+    explanation: 'Серце — м’язовий насос, що перекачує кров судинами. Печінка очищує кров, легені насичують її киснем.',
+  },
+  {
+    id: 'bio-8', subject: 'biology', topic: 'human',
+    prompt: 'Скільки камер має серце людини?',
+    options: ['2', '3', '4', '6'],
+    correctIndex: 2,
+    explanation: 'У серці людини чотири камери: два передсердя і два шлуночки. Це забезпечує поділ артеріальної та венозної крові.',
+  },
+  {
+    id: 'bio-9', subject: 'biology', topic: 'human',
+    prompt: 'Який газ людина видихає у найбільшій кількості?',
+    options: ['кисень', 'вуглекислий газ', 'азот', 'водень'],
+    correctIndex: 1,
+    explanation: 'Під час дихання клітини використовують кисень і утворюють вуглекислий газ, який видихається.',
+  },
+  {
+    id: 'bio-10', subject: 'biology', topic: 'genetics',
+    prompt: 'Яка молекула є носієм спадкової інформації?',
+    options: ['глюкоза', 'гемоглобін', 'ДНК', 'хлорофіл'],
+    correctIndex: 2,
+    explanation: 'ДНК зберігає й передає спадкову інформацію. Гемоглобін переносить кисень, хлорофіл забезпечує фотосинтез.',
+  },
+  {
+    id: 'bio-11', subject: 'biology', topic: 'genetics',
+    prompt: 'Як називається ознака, яку пригнічує інша?',
+    options: ['домінантна', 'мутаційна', 'рецесивна', 'зчеплена'],
+    correctIndex: 2,
+    explanation: 'Рецесивна ознака проявляється лише тоді, коли немає домінантної. Домінантна пригнічує рецесивну.',
+  },
+  {
+    id: 'bio-12', subject: 'biology', topic: 'genetics',
+    prompt: 'Скільки хромосом у статевій клітині людини?',
+    options: ['46', '23', '92', '48'],
+    correctIndex: 1,
+    explanation: 'Статеві клітини (гамети) мають гаплоїдний набір — 23 хромосоми. Після запліднення утворюється 46.',
+  },
+  {
+    id: 'bio-13', subject: 'biology', topic: 'ecology',
+    prompt: 'Що таке фотосинтез?',
+    options: ['розщеплення органічних речовин', 'дихання клітин', 'утворення органічних речовин із води й вуглекислого газу на світлі', 'поділ клітини'],
+    correctIndex: 2,
+    explanation: 'Фотосинтез відбувається в хлоропластах на світлі: рослини утворюють глюкозу й виділяють кисень.',
+  },
+  {
+    id: 'bio-14', subject: 'biology', topic: 'ecology',
+    prompt: 'Які організми розкладають залишки живих істот?',
+    options: ['продуценти', 'редуценти', 'консументи', 'паразити'],
+    correctIndex: 1,
+    explanation: 'Редуценти (бактерії й гриби) розкладають органіку до простих речовин, повертаючи їх у ґрунт.',
+  },
+  {
+    id: 'bio-15', subject: 'biology', topic: 'ecology',
+    prompt: 'З чого починається ланцюг живлення?',
+    options: ['з консументів', 'з редуцентів', 'з продуцентів', 'з хижаків'],
+    correctIndex: 2,
+    explanation: 'Ланцюг живлення починається з продуцентів — рослин, які створюють органічні речовини під час фотосинтезу.',
   },
   {
     id: 'chem-1', subject: 'chemistry', topic: 'periodic',
@@ -464,6 +727,83 @@ export const MOCK_QUESTIONS: Question[] = [
     explanation: 'Метан CH₄ — найпростіший алкан з одного атома карбону та чотирьох атомів гідрогену.',
   },
   {
+    id: 'chem-5', subject: 'chemistry', topic: 'periodic',
+    prompt: 'Який хімічний символ має Оксиген?',
+    options: ['Ox', 'O', 'Og', 'On'],
+    correctIndex: 1,
+    explanation: 'Оксиген позначається O. Ox — не існує, Og — оганесон, On — застаріле позначення.',
+  },
+  {
+    id: 'chem-6', subject: 'chemistry', topic: 'periodic',
+    prompt: 'Який атомний номер у Карбону?',
+    options: ['8', '6', '12', '14'],
+    correctIndex: 1,
+    explanation: 'Карбон має атомний номер 6: 6 протонів і 6 електронів. Атомна маса — близько 12.',
+  },
+  {
+    id: 'chem-7', subject: 'chemistry', topic: 'reactions',
+    prompt: 'Реакція нейтралізації — це взаємодія...',
+    options: ['двох кислот', 'двох солей', 'кислоти й основи', 'металу й води'],
+    correctIndex: 2,
+    explanation: 'Під час нейтралізації кислота й основа утворюють сіль і воду: HCl + NaOH → NaCl + H₂O.',
+  },
+  {
+    id: 'chem-8', subject: 'chemistry', topic: 'reactions',
+    prompt: 'Завершіть рівняння: 2H₂ + O₂ → ...',
+    options: ['H₂O₂', '2HO', '2H₂O', 'H₂ + O₂'],
+    correctIndex: 2,
+    explanation: 'Два моль водню реагують з одним моль кисню, утворюючи два моль води: 2H₂ + O₂ → 2H₂O.',
+  },
+  {
+    id: 'chem-9', subject: 'chemistry', topic: 'solutions',
+    prompt: 'Розчин із pH більше 7 називають...',
+    options: ['кислим', 'нейтральним', 'насиченим', 'лужним'],
+    correctIndex: 3,
+    explanation: 'pH > 7 — лужне середовище, pH < 7 — кисле, pH = 7 — нейтральне.',
+  },
+  {
+    id: 'chem-10', subject: 'chemistry', topic: 'solutions',
+    prompt: 'Яка масова частка солі, якщо 10 г солі розчинили у 90 г води?',
+    options: ['9%', '10%', '11%', '20%'],
+    correctIndex: 1,
+    explanation: 'Маса розчину 10 + 90 = 100 г. w = 10/100 · 100% = 10%.',
+  },
+  {
+    id: 'chem-11', subject: 'chemistry', topic: 'solutions',
+    prompt: 'Розчинність — це здатність речовини...',
+    options: ['плавитися при нагріванні', 'реагувати з киснем', 'розчинятися в розчиннику за певних умов', 'проводити струм'],
+    correctIndex: 2,
+    explanation: 'Розчинність показує, яка маса речовини розчиняється в певній кількості розчинника за даної температури.',
+  },
+  {
+    id: 'chem-12', subject: 'chemistry', topic: 'organic',
+    prompt: 'Яка формула етанолу?',
+    options: ['CH₄', 'C₂H₆', 'C₂H₅OH', 'CH₃COOH'],
+    correctIndex: 2,
+    explanation: 'Етанол — C₂H₅OH (або C₂H₆O). CH₄ — метан, C₂H₆ — етан, CH₃COOH — оцтова кислота.',
+  },
+  {
+    id: 'chem-13', subject: 'chemistry', topic: 'organic',
+    prompt: 'Яка з речовин належить до вуглеводнів?',
+    options: ['етанол', 'метан', 'оцтова кислота', 'вода'],
+    correctIndex: 1,
+    explanation: 'Вуглеводні складаються лише з Карбону й Гідрогену. Метан CH₄ — найпростіший вуглеводень.',
+  },
+  {
+    id: 'chem-14', subject: 'chemistry', topic: 'periodic',
+    prompt: 'Який елемент позначають символом Fe?',
+    options: ['Флуор', 'Фосфор', 'Францій', 'Ферум'],
+    correctIndex: 3,
+    explanation: 'Fe — Ферум (залізо). Флуор — F, Фосфор — P, Францій — Fr.',
+  },
+  {
+    id: 'chem-15', subject: 'chemistry', topic: 'reactions',
+    prompt: 'Який газ виділяється при взаємодії цинку з розведеною сульфатною кислотою?',
+    options: ['кисень', 'вуглекислий газ', 'водень', 'хлор'],
+    correctIndex: 2,
+    explanation: 'Zn + H₂SO₄ → ZnSO₄ + H₂↑. Метал витісняє водень із кислоти.',
+  },
+  {
     id: 'geo-1', subject: 'geography', topic: 'ukraine',
     prompt: 'Яка річка є найдовшою в Україні?',
     options: ['Дністер', 'Дніпро', 'Південний Буг', 'Десна'],
@@ -483,6 +823,344 @@ export const MOCK_QUESTIONS: Question[] = [
     options: ['Тропічний', 'Помірний континентальний', 'Полярний', 'Екваторіальний'],
     correctIndex: 1,
     explanation: 'В Україні переважає помірний континентальний клімат з теплим літом і помірно холодною зимою.',
+  },
+  {
+    id: 'geo-4', subject: 'geography', topic: 'ukraine',
+    prompt: 'Яка найвища гора України?',
+    options: ['Петрос', 'Говерла', 'Бребенескул', 'Роман-Кош'],
+    correctIndex: 1,
+    explanation: 'Говерла — 2061 м, найвища вершина Українських Карпат і всієї України.',
+  },
+  {
+    id: 'geo-5', subject: 'geography', topic: 'ukraine',
+    prompt: 'Яке море омиває береги Одеси?',
+    options: ['Азовське', 'Балтійське', 'Чорне', 'Середземне'],
+    correctIndex: 2,
+    explanation: 'Одеса розташована на березі Чорного моря. Азовське море омиває південний схід України.',
+  },
+  {
+    id: 'geo-6', subject: 'geography', topic: 'ukraine',
+    prompt: 'Столиця України — це...',
+    options: ['Харків', 'Київ', 'Львів', 'Одеса'],
+    correctIndex: 1,
+    explanation: 'Київ — столиця та найбільше місто України, розташоване на Дніпрі.',
+  },
+  {
+    id: 'geo-7', subject: 'geography', topic: 'world',
+    prompt: 'Найвища гора світу — це...',
+    options: ['Кіліманджаро', 'Еверест', 'Ельбрус', 'Монблан'],
+    correctIndex: 1,
+    explanation: 'Еверест (Джомолунгма) — 8849 м над рівнем моря, найвища вершина планети.',
+  },
+  {
+    id: 'geo-8', subject: 'geography', topic: 'world',
+    prompt: 'Найбільший океан Землі — це...',
+    options: ['Атлантичний', 'Індійський', 'Північний Льодовитий', 'Тихий'],
+    correctIndex: 3,
+    explanation: 'Тихий океан найбільший за площею та глибиною. Він займає близько третини поверхні Землі.',
+  },
+  {
+    id: 'geo-9', subject: 'geography', topic: 'world',
+    prompt: 'Найменша країна світу — це...',
+    options: ['Монако', 'Сан-Марино', 'Ватикан', 'Люксембург'],
+    correctIndex: 2,
+    explanation: 'Ватикан — найменша держава світу, площа близько 0,44 км².',
+  },
+  {
+    id: 'geo-10', subject: 'geography', topic: 'climate',
+    prompt: 'Який кліматичний пояс панує на екваторі?',
+    options: ['тропічний', 'помірний', 'екваторіальний', 'полярний'],
+    correctIndex: 2,
+    explanation: 'На екваторі цілий рік спекотно й волого, тому там панує екваторіальний клімат.',
+  },
+  {
+    id: 'geo-11', subject: 'geography', topic: 'climate',
+    prompt: 'У якому кліматичному поясі лежить більша частина України?',
+    options: ['тропічному', 'помірному', 'субтропічному', 'полярному'],
+    correctIndex: 1,
+    explanation: 'Більша частина України — у помірному кліматичному поясі. Південний берег Криму має риси субтропіків.',
+  },
+  {
+    id: 'geo-12', subject: 'geography', topic: 'economy',
+    prompt: 'Яка галузь вирощує зернові культури?',
+    options: ['тваринництво', 'металургія', 'рослинництво', 'машинобудування'],
+    correctIndex: 2,
+    explanation: 'Зернові — пшеницю, кукурудзу, ячмінь — вирощують у рослинництві, галузі сільського господарства.',
+  },
+  {
+    id: 'geo-13', subject: 'geography', topic: 'economy',
+    prompt: 'Що Україна експортує найбільше серед агропродукції?',
+    options: ['каву', 'цитрусові', 'чай', 'зерно'],
+    correctIndex: 3,
+    explanation: 'Україна — один із провідних світових експортерів зерна, зокрема пшениці та кукурудзи.',
+  },
+  {
+    id: 'geo-14', subject: 'geography', topic: 'economy',
+    prompt: 'Металургія — це галузь, яка...',
+    options: ['вирощує рослини', 'видобуває нафту', 'виплавляє метали з руди', 'виробляє тканини'],
+    correctIndex: 2,
+    explanation: 'Металургія переробляє руду й виплавляє чавун, сталь, алюміній та інші метали.',
+  },
+  {
+    id: 'geo-15', subject: 'geography', topic: 'ukraine',
+    prompt: 'Яка область України має вихід до Чорного моря?',
+    options: ['Львівська', 'Чернігівська', 'Вінницька', 'Одеська'],
+    correctIndex: 3,
+    explanation: 'Одеська область розташована на півдні України й має вихід до Чорного моря.',
+  },
+
+  // ─── Нові формати (matching, ordering, compare, classify, errorFind, calculation, analogy) ───
+  {
+    id: 'en-m1', subject: 'english', topic: 'tenses', kind: 'matching',
+    prompt: 'Зіставте речення з часом дієслова: «She goes to school every day.»',
+    options: ['Present Simple', 'Past Simple', 'Present Perfect', 'Future Simple'],
+    correctIndex: 0,
+    explanation: '«She goes» — Present Simple: регулярна дія в теперішньому. Past Simple — «went», Present Perfect — «has gone», Future — «will go».',
+  },
+  {
+    id: 'en-o1', subject: 'english', topic: 'grammar', kind: 'ordering',
+    prompt: 'Яка послідовність часів є хронологічно правильною?',
+    options: ['Present → Past → Future', 'Past → Present → Future', 'Future → Present → Past', 'Present → Future → Past'],
+    correctIndex: 0,
+    explanation: 'Спочатку теперішнє, потім минуле, потім майбутнє: Present → Past → Future.',
+  },
+  {
+    id: 'en-c1', subject: 'english', topic: 'tenses', kind: 'compare',
+    prompt: 'Що триває довше: Present Perfect чи Present Simple?',
+    options: ['Present Perfect', 'Present Simple', 'однаково', 'залежить від речення'],
+    correctIndex: 0,
+    explanation: 'Present Perfect підкреслює результат дії, що має зв’язок із теперішнім, тож його тривалість більша за звичайний Present Simple.',
+  },
+  {
+    id: 'en-a1', subject: 'english', topic: 'grammar', kind: 'analogy',
+    prompt: 'Аналогія: walk : walked = go : ?',
+    options: ['goed', 'went', 'gone', 'going'],
+    correctIndex: 1,
+    explanation: '«Walk» утворює минулий час додаванням -ed (walked), а «go» має неправильну форму «went».',
+  },
+  {
+    id: 'de-m1', subject: 'german', topic: 'artikel', kind: 'matching',
+    prompt: 'Зіставте слово з родом: «die Frau»',
+    options: ['чоловічий', 'жіночий', 'середній', 'множина'],
+    correctIndex: 1,
+    explanation: '«Frau» — жіночого роду, тому артикль «die». У множині всі роди теж «die», але слово однини жіночого роду.',
+  },
+  {
+    id: 'de-o1', subject: 'german', topic: 'verbs', kind: 'ordering',
+    prompt: 'Яка послідовність слів у реченні з модальним дієсловом правильна?',
+    options: ['will ... lernen', 'lerne ... wollen', 'lernen ... will', 'will ... lernen?'],
+    correctIndex: 0,
+    explanation: 'Модальне дієслово стоїть на другому місці, а смислове — в кінці: «Ich will Deutsch lernen».',
+  },
+  {
+    id: 'de-calc1', subject: 'german', topic: 'cases', kind: 'calculation',
+    prompt: 'Скільки відмінків у німецькій мові?',
+    options: ['2', '3', '4', '5'],
+    correctIndex: 2,
+    explanation: 'У німецькій чотири відмінки: Nominativ, Akkusativ, Dativ, Genitiv.',
+  },
+  {
+    id: 'de-classify1', subject: 'german', topic: 'artikel', kind: 'classify',
+    prompt: 'До якої частини мови належить «der Tisch»?',
+    options: ['іменник', 'дієслово', 'прикметник', 'займенник'],
+    correctIndex: 0,
+    explanation: '«Der Tisch» — іменник чоловічого роду. Дієслово — «tischen», прикметник — «tischlich».',
+  },
+  {
+    id: 'pl-m1', subject: 'polish', topic: 'pronouns', kind: 'matching',
+    prompt: 'Зіставте займенник з перекладом: «ona»',
+    options: ['він', 'вона', 'воно', 'вони'],
+    correctIndex: 1,
+    explanation: '«Ona» — вона. «On» — він, «ono» — воно, «oni» — вони (чол./зміш.).',
+  },
+  {
+    id: 'pl-e1', subject: 'polish', topic: 'verbs', kind: 'errorFind',
+    prompt: 'У якому реченні є помилка?',
+    options: ['Ona czyta książkę.', 'Ja mieszkam w Warszawie.', 'Ja jestem student.', 'Ty jesteś student.'],
+    correctIndex: 2,
+    explanation: 'Правильно: «Ja jestem studentem» — у називному з іменником чоловічого роду у формі «jestem studentem» (орудний). Варіант «Ja jestem student» — помилка.',
+  },
+  {
+    id: 'pl-c1', subject: 'polish', topic: 'verbs', kind: 'compare',
+    prompt: 'Що довше за формою: «mieszkam» чи «mieszkaliśmy»?',
+    options: ['mieszkam', 'mieszkaliśmy', 'однаково', 'залежить'],
+    correctIndex: 1,
+    explanation: '«Mieszkaliśmy» — форма минулого часу множини, має більше літер і звуків, ніж теперішнє «mieszkam».',
+  },
+  {
+    id: 'pl-a1', subject: 'polish', topic: 'cases', kind: 'analogy',
+    prompt: 'Аналогія: dom : domy = książka : ?',
+    options: ['książki', 'książek', 'książką', 'książki?'],
+    correctIndex: 0,
+    explanation: 'Однина «dom» → множина «domy»; так само «książka» → «książki» (називний множини).',
+  },
+  {
+    id: 'hist-m1', subject: 'history', topic: 'kyivan', kind: 'matching',
+    prompt: 'Зіставте подію з роком: хрещення Київської Русі',
+    options: ['862', '988', '1054', '1240'],
+    correctIndex: 1,
+    explanation: '988 року князь Володимир Великий хрестив Русь. 862 — прихід Рюрика, 1054 — смерть Ярослава, 1240 — захоплення Києва монголами.',
+  },
+  {
+    id: 'hist-o1', subject: 'history', topic: 'independence', kind: 'ordering',
+    prompt: 'Розташуйте епохи в правильній хронології:',
+    options: ['Київська Русь → Козацтво → Незалежність', 'Козацтво → Русь → Незалежність', 'Незалежність → Русь → Козацтво', 'Русь → Незалежність → Козацтво'],
+    correctIndex: 0,
+    explanation: 'Спочатку Київська Русь, потім козацька доба, а потім незалежна Україна.',
+  },
+  {
+    id: 'hist-classify1', subject: 'history', topic: 'cossacks', kind: 'classify',
+    prompt: 'До якої доби належить Богдан Хмельницький?',
+    options: ['Київська Русь', 'Козацька доба', 'XX століття', 'Незалежна Україна'],
+    correctIndex: 1,
+    explanation: 'Богдан Хмельницький очолив національно-визвольну війну у XVII ст. — це козацька доба.',
+  },
+  {
+    id: 'hist-calc1', subject: 'history', topic: 'kyivan', kind: 'calculation',
+    prompt: 'Скільки років минуло від хрещення Русі (988) до проголошення незалежності (1991)?',
+    options: ['903', '1003', '1013', '1103'],
+    correctIndex: 1,
+    explanation: '1991 − 988 = 1003 роки.',
+  },
+  {
+    id: 'math-m1', subject: 'math', topic: 'geometry', kind: 'matching',
+    prompt: 'Зіставте формулу з фігурою: S = a²',
+    options: ['квадрат', 'прямокутник', 'трикутник', 'коло'],
+    correctIndex: 0,
+    explanation: 'Площа квадрата S = a². Прямокутник — a·b, трикутник — ½·a·h, коло — πr².',
+  },
+  {
+    id: 'math-o1', subject: 'math', topic: 'algebra', kind: 'ordering',
+    prompt: 'Яка послідовність дій у виразі 2 + 3 × 4 правильна?',
+    options: ['дужки, множення, додавання', 'множення, додавання', 'додавання, множення', 'зліва направо'],
+    correctIndex: 1,
+    explanation: 'Спочатку множення (3×4=12), потім додавання (2+12=14). Правило: множення/ділення перед додаванням/відніманням.',
+  },
+  {
+    id: 'math-c1', subject: 'math', topic: 'fractions', kind: 'compare',
+    prompt: 'Що більше: 3/4 чи 2/3?',
+    options: ['3/4', '2/3', 'однаково', 'не можна порівняти'],
+    correctIndex: 0,
+    explanation: '3/4 = 0,75; 2/3 ≈ 0,667. Отже 3/4 більше.',
+  },
+  {
+    id: 'math-a1', subject: 'math', topic: 'algebra', kind: 'analogy',
+    prompt: 'Аналогія: 2 : 4 = 3 : ?',
+    options: ['5', '6', '9', '12'],
+    correctIndex: 1,
+    explanation: 'Пропорція 2/4 = 3/x → x = 6. 2:4 = 1:2, тож 3:6.',
+  },
+  {
+    id: 'uk-m1', subject: 'ukrainian', topic: 'morphology', kind: 'matching',
+    prompt: 'Зіставте слово з частиною мови: «швидко»',
+    options: ['іменник', 'прикметник', 'прислівник', 'дієслово'],
+    correctIndex: 2,
+    explanation: '«Швидко» відповідає на питання «як?» — це прислівник. Іменник — біг, прикметник — швидкий, дієслово — бігти.',
+  },
+  {
+    id: 'uk-e1', subject: 'ukrainian', topic: 'orthography', kind: 'errorFind',
+    prompt: 'У якому рядку є орфографічна помилка?',
+    options: ['півроку, п’ять, бур’ян', 'пів-року, п’ять, бур’ян', 'з’їзд, п’ять, бур’ян', 'з’їзд, п’ять, бур’ян'],
+    correctIndex: 1,
+    explanation: '«Пів-року» пишемо разом: «півроку». Інші рядки написані правильно.',
+  },
+  {
+    id: 'uk-classify1', subject: 'ukrainian', topic: 'stylistics', kind: 'classify',
+    prompt: 'До якого стилю належить текст наукової статті?',
+    options: ['художній', 'науковий', 'розмовний', 'публіцистичний'],
+    correctIndex: 1,
+    explanation: 'Науковий стиль використовує терміни, точні факти й логічність.',
+  },
+  {
+    id: 'uk-calc1', subject: 'ukrainian', topic: 'morphology', kind: 'calculation',
+    prompt: 'Скільки відмінків в українській мові?',
+    options: ['5', '6', '7', '8'],
+    correctIndex: 2,
+    explanation: 'В українській 7 відмінків: називний, родовий, давальний, знахідний, орудний, місцевий, кличний.',
+  },
+  {
+    id: 'bio-m1', subject: 'biology', topic: 'cell', kind: 'matching',
+    prompt: 'Зіставте органелу з функцією: мітохондрія',
+    options: ['синтез білка', 'енергія', 'фотосинтез', 'зберігання'],
+    correctIndex: 1,
+    explanation: 'Мітохондрії виробляють енергію (АТФ). Синтез білка — рибосоми, фотосинтез — хлоропласти, зберігання — вакуолі.',
+  },
+  {
+    id: 'bio-c1', subject: 'biology', topic: 'genetics', kind: 'compare',
+    prompt: 'Що більше: кількість хромосом у соматичній чи статевій клітині людини?',
+    options: ['соматична', 'статева', 'однаково', 'не можна порівняти'],
+    correctIndex: 0,
+    explanation: 'Соматична клітина має 46 хромосом, статева — 23. Отже соматична більше.',
+  },
+  {
+    id: 'bio-o1', subject: 'biology', topic: 'human', kind: 'ordering',
+    prompt: 'Розташуйте рівні організації життя від простого до складного:',
+    options: ['клітина → тканина → орган → система органів → організм', 'організм → орган → тканина → клітина', 'тканина → клітина → орган → система', 'орган → тканина → клітина → організм'],
+    correctIndex: 0,
+    explanation: 'Від клітини до організму: клітина → тканина → орган → система органів → організм.',
+  },
+  {
+    id: 'bio-a1', subject: 'biology', topic: 'human', kind: 'analogy',
+    prompt: 'Аналогія: серце : кров = легені : ?',
+    options: ['їжа', 'кисень', 'гормони', 'вода'],
+    correctIndex: 1,
+    explanation: 'Серце перекачує кров, а легені забезпечують її киснем.',
+  },
+  {
+    id: 'chem-m1', subject: 'chemistry', topic: 'periodic', kind: 'matching',
+    prompt: 'Зіставте символ з елементом: Fe',
+    options: ['Флуор', 'Фосфор', 'Ферум', 'Францій'],
+    correctIndex: 2,
+    explanation: 'Fe — Ферум (залізо). Флуор — F, Фосфор — P, Францій — Fr.',
+  },
+  {
+    id: 'chem-c1', subject: 'chemistry', topic: 'solutions', kind: 'compare',
+    prompt: 'Що має вищий pH: кислота чи основа?',
+    options: ['кислота', 'основа', 'однаково', 'залежить'],
+    correctIndex: 1,
+    explanation: 'Основа має pH > 7, кислота — pH < 7. Отже основа має вищий pH.',
+  },
+  {
+    id: 'chem-calc1', subject: 'chemistry', topic: 'periodic', kind: 'calculation',
+    prompt: 'Скільки атомів у молекулі води?',
+    options: ['2', '3', '4', '5'],
+    correctIndex: 1,
+    explanation: 'H₂O має 2 атоми Гідрогену + 1 атом Оксигену = 3 атоми.',
+  },
+  {
+    id: 'chem-e1', subject: 'chemistry', topic: 'reactions', kind: 'errorFind',
+    prompt: 'У рівнянні «H₂ + O₂ → H₂O» є помилка. Що пропущено?',
+    options: ['коефіцієнт 2 перед H₂O', 'коефіцієнт 2 перед H₂', 'коефіцієнт 2 перед O₂', 'помилки немає'],
+    correctIndex: 0,
+    explanation: 'Правильне рівняння: 2H₂ + O₂ → 2H₂O. Пропущено коефіцієнт 2 перед H₂O.',
+  },
+  {
+    id: 'geo-m1', subject: 'geography', topic: 'world', kind: 'matching',
+    prompt: 'Зіставте країну з континентом: Єгипет',
+    options: ['Африка', 'Азія', 'Європа', 'Австралія'],
+    correctIndex: 0,
+    explanation: 'Єгипет розташований на північному сході Африки.',
+  },
+  {
+    id: 'geo-o1', subject: 'geography', topic: 'world', kind: 'ordering',
+    prompt: 'Розташуйте країни за площею від меншої до більшої:',
+    options: ['Ватикан, Монако, Україна, Росія', 'Росія, Україна, Монако, Ватикан', 'Монако, Ватикан, Росія, Україна', 'Україна, Росія, Монако, Ватикан'],
+    correctIndex: 0,
+    explanation: 'Ватикан (0,44 км²) < Монако (2,02 км²) < Україна (603 548 км²) < Росія (17,1 млн км²).',
+  },
+  {
+    id: 'geo-classify1', subject: 'geography', topic: 'climate', kind: 'classify',
+    prompt: 'До якого кліматичного поясу належить Сахара?',
+    options: ['помірний', 'тропічний', 'екваторіальний', 'полярний'],
+    correctIndex: 1,
+    explanation: 'Сахара лежить у тропічному поясі з спекотним і сухим кліматом.',
+  },
+  {
+    id: 'geo-a1', subject: 'geography', topic: 'world', kind: 'analogy',
+    prompt: 'Аналогія: Київ : Україна = Париж : ?',
+    options: ['Франція', 'Німеччина', 'Італія', 'Іспанія'],
+    correctIndex: 0,
+    explanation: 'Київ — столиця України, а Париж — столиця Франції.',
   },
 
   // ─── True / False ─────────────────────────────────────────────
@@ -603,28 +1281,37 @@ export const MOCK_QUESTIONS: Question[] = [
 ];
 
 /**
- * Pick N random questions, optionally filtered by subject and topic.
- * Guarantees at least N questions (cycling if pool is smaller).
+ * Pick exactly N questions. The chosen topic goes first, then other questions
+ * of the same subject fill the rest so every subject always has 15 questions.
  */
 export function pickMockQuestions(
   subject: string,
   topicId: string | undefined,
   count: number,
 ): Question[] {
-  const pool = MOCK_QUESTIONS.filter(
-    (q) => q.subject === subject && (!topicId || q.topic === topicId),
-  );
-  const source = pool.length > 0 ? pool : MOCK_QUESTIONS.filter((q) => q.subject === subject);
-  const base = source.length > 0 ? source : MOCK_QUESTIONS;
+  const subjectPool = MOCK_QUESTIONS.filter((q) => q.subject === subject);
+  const all = subjectPool.length > 0 ? subjectPool : MOCK_QUESTIONS;
 
-  const shuffled = [...base].sort(() => Math.random() - 0.5);
+  const topicPool = topicId ? all.filter((q) => q.topic === topicId) : [];
+  const ordered = [
+    ...shuffle(topicPool),
+    ...shuffle(all.filter((q) => !topicPool.includes(q))),
+  ];
+
   const result: Question[] = [];
   let i = 0;
-  while (result.length < count) {
-    const q = shuffled[i % shuffled.length];
-    if (!result.some((r) => r.id === q.id)) result.push(q);
+  while (result.length < count && ordered.length > 0) {
+    result.push(ordered[i % ordered.length]);
     i++;
-    if (i > count * 4) break; // safety valve
   }
-  return result.slice(0, count);
+  return result;
+}
+
+function shuffle<T>(items: T[]): T[] {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
