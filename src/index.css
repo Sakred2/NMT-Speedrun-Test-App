@@ -1,0 +1,251 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-cave-500 text-white font-sans antialiased;
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(59, 158, 255, 0.06), transparent 45%),
+    radial-gradient(circle at 80% 100%, rgba(255, 122, 61, 0.05), transparent 45%),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.012),
+      rgba(255, 255, 255, 0.012) 2px,
+      transparent 2px,
+      transparent 22px
+    );
+}
+
+/* Chunky beveled block button — Flood Escape 2 style */
+.fe-btn {
+  @apply relative select-none rounded-xl font-display font-extrabold uppercase tracking-wide text-white;
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.18), rgba(0, 0, 0, 0.18));
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    0 4px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.08s ease, filter 0.15s ease;
+}
+.fe-btn:hover {
+  filter: brightness(1.12);
+}
+.fe-btn:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.25),
+    0 1px 0 rgba(0, 0, 0, 0.3);
+}
+.fe-btn:disabled {
+  @apply cursor-not-allowed opacity-50;
+  filter: grayscale(0.5);
+}
+
+/* Panel: dark steel plate */
+.fe-panel {
+  @apply rounded-2xl bg-cave-300/90 ring-1 ring-steel-500/60;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-cave-400;
+}
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-steel-300;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-steel-200;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* === Underwater effects === */
+@keyframes bubble-rise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(-50vh) translateX(10px) scale(1);
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(-6px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+@keyframes wave-sway {
+  0%, 100% {
+    transform: translateX(-2%) scaleY(1);
+  }
+  50% {
+    transform: translateX(2%) scaleY(1.08);
+  }
+}
+
+@keyframes water-shimmer {
+  0%, 100% {
+    opacity: 0.18;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.32;
+    transform: translateX(8px);
+  }
+}
+
+@keyframes caustic-shift {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+@keyframes drown-pulse {
+  0%, 100% {
+    box-shadow: inset 0 0 120px rgba(40, 120, 200, 0.5);
+  }
+  50% {
+    box-shadow: inset 0 0 200px rgba(20, 80, 160, 0.75);
+  }
+}
+
+@keyframes screen-warp {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+  }
+  50% {
+    transform: scale(1.008) translateY(-2px);
+  }
+}
+
+.uw-overlay {
+  pointer-events: none;
+}
+
+/* blue tint + vignette over everything */
+.uw-tint {
+  background:
+    radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(20, 70, 130, 0.35) 100%),
+    linear-gradient(180deg, rgba(30, 100, 180, 0.22), rgba(10, 50, 110, 0.45));
+  animation: drown-pulse 2.4s ease-in-out infinite;
+}
+
+/* moving caustic light rays */
+.uw-caustics {
+  background-image:
+    repeating-linear-gradient(
+      105deg,
+      transparent 0,
+      transparent 60px,
+      rgba(120, 200, 255, 0.06) 60px,
+      rgba(120, 200, 255, 0.06) 90px,
+      transparent 90px,
+      transparent 160px
+    );
+  background-size: 300% 100%;
+  animation: caustic-shift 8s linear infinite;
+  mix-blend-mode: screen;
+}
+
+/* water surface waves at the top */
+.uw-surface {
+  background:
+    radial-gradient(ellipse 50% 16px at 20% 0, rgba(140, 210, 255, 0.25), transparent),
+    radial-gradient(ellipse 50% 16px at 50% 0, rgba(140, 210, 255, 0.2), transparent),
+    radial-gradient(ellipse 50% 16px at 80% 0, rgba(140, 210, 255, 0.25), transparent);
+  height: 40px;
+  animation: wave-sway 3.5s ease-in-out infinite;
+}
+
+.uw-content-warp {
+  animation: screen-warp 4s ease-in-out infinite;
+  filter: saturate(0.85) hue-rotate(-8deg) brightness(0.92);
+}
+
+/* individual bubble */
+.uw-bubble {
+  position: absolute;
+  bottom: -20px;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(150, 210, 255, 0.3));
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.5);
+  animation: bubble-rise linear infinite;
+}
+
+@keyframes letter-fly {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  25% { transform: translate3d(3px, -8px, 0) rotate(6deg); }
+  50% { transform: translate3d(-2px, -14px, 0) rotate(-5deg); }
+  75% { transform: translate3d(-4px, -5px, 0) rotate(4deg); }
+}
+
+.fly-letter {
+  display: inline-block;
+  animation: letter-fly 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fly-letter { animation: none; }
+}
+
+.shine-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 40%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  animation: shine-sweep 3.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes shine-sweep {
+  0% { left: -60%; }
+  60%, 100% { left: 130%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shine-sweep::after { animation: none; }
+}
+
