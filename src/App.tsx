@@ -24,7 +24,7 @@ const QUESTION_COUNT = 15;
 // Per-question time limit (auto-lock if exceeded). Flood rises across the whole test.
 const TIME_PER_QUESTION = 18;
 // Total seconds for flood to reach 100% across the whole run.
-const FLOOD_MAX_SECONDS = 4; // TEMP: visual QA
+const FLOOD_MAX_SECONDS = QUESTION_COUNT * TIME_PER_QUESTION; // ~140s
 const MAX_AIR = 100;
 // Air drain rates per difficulty (per second while flooded)
 const DRAIN_RATES: Record<Difficulty, number> = { easy: 2, normal: 4, hard: 10 };
