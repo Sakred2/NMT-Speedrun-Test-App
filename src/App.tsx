@@ -61,7 +61,11 @@ function App() {
   const activeElement: Element =
     (SUBJECTS.find((s) => s.id === subject)?.element) ?? 'water';
 
+  const floodPct = Math.min(100, (elapsed / FLOOD_MAX_SECONDS) * 100);
   const flooded = screen === 'test' && elapsed >= FLOOD_MAX_SECONDS;
+  // The tide keeps rising through the run; the drowned screen stays underwater too.
+  const underwater = floodPct >= 100 && (screen === 'test' || screen === 'drowned');
+  const tideLevel = screen === 'test' || screen === 'drowned' ? floodPct : 0;
 
   useEffect(() => {
     setSoundEnabled(soundOn);
@@ -272,7 +276,12 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      <UnderwaterOverlay active={flooded} />
+      <UnderwaterOverlay
+        active={underwater}
+        floodPct={tideLevel}
+        air={air}
+        element={activeElement}
+      />
       <Header onOpenSettings={() => setSettingsOpen(true)} onOpenEditor={() => handleOpenEditor(null)} source={source} soundOn={soundOn} onToggleSound={toggleSound} />
       <SettingsModal
         open={settingsOpen}

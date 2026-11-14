@@ -1,7 +1,9 @@
+import type { CSSProperties } from 'react';
 import { Lightbulb, ChevronRight, Check, X, CircleHelp, PenLine, ListChecks, Link2, ArrowUpDown, Scale, Tag, AlertTriangle, Calculator, Sparkles } from 'lucide-react';
 import type { Question } from '@/types';
 import type { Element } from '@/data/subjects';
 import { ELEMENT_COLOR } from '@/data/subjects';
+import WaterSurface from '@/components/WaterSurface';
 
 interface Props {
   question: Question;
@@ -17,6 +19,16 @@ interface Props {
 }
 
 const LETTERS = ['A', 'B', 'C', 'D'];
+
+const SPLASH_DROPS = Array.from({ length: 9 }, (_, i) => {
+  const dir = i % 2 === 0 ? 1 : -1;
+  return {
+    dx: dir * (16 + ((i * 23) % 76)),
+    dy: -(20 + ((i * 17) % 48)),
+    delay: (i % 5) * 0.035,
+    size: 3 + (i % 3),
+  };
+});
 
 export default function QuestionCard({
   question, index, total, selectedIndex, answered, element, floodPct, onSelect, onNext,
@@ -144,35 +156,43 @@ export default function QuestionCard({
           className="pointer-events-none absolute inset-x-0 bottom-0 z-0 transition-all duration-1000 ease-linear"
           style={{
             height: `${floodPct}%`,
-            background: `linear-gradient(180deg, ${color}40 0%, ${color}66 35%, ${color}80 100%)`,
+            backgroundImage: `linear-gradient(180deg, ${color}b3 0px, ${color}8c 16px, ${color}4d 56px, ${color}73 100%)`,
           }}
         >
-          {/* wavy surface line at the top of the water */}
-          <div
-            className="absolute -top-1.5 left-0 right-0 h-3 animate-pulse-glow"
-            style={{
-              background: `linear-gradient(90deg, transparent, ${color}, transparent)`,
-              borderRadius: '50%',
-            }}
-          />
-          {/* subtle wave shimmer */}
-          <div
-            className="absolute top-0 left-0 right-0 h-6 opacity-40"
-            style={{
-              backgroundImage:
-                'repeating-linear-gradient(90deg, rgba(255,255,255,0.15) 0, rgba(255,255,255,0.15) 8px, transparent 8px, transparent 24px)',
-            }}
-          />
-          {/* bubbles inside the water */}
-          {floodPct > 10 && (
-            <>
-              <span className="uw-bubble" style={{ left: '15%', width: '6px', height: '6px', animationDuration: '4s', animationDelay: '0s' }} />
-              <span className="uw-bubble" style={{ left: '45%', width: '4px', height: '4px', animationDuration: '3.5s', animationDelay: '1.2s' }} />
-              <span className="uw-bubble" style={{ left: '75%', width: '8px', height: '8px', animationDuration: '5s', animationDelay: '0.6s' }} />
-              <span className="uw-bubble" style={{ left: '88%', width: '5px', height: '5px', animationDuration: '4.5s', animationDelay: '2s' }} />
-            </>
-          )}
+          <div className="uw-water-inner">
+            <div className="uw-caustics card-caustics" />
+            {floodPct > 8 && (
+              <>
+                <span className="uw-bubble uw-bubble--inwater" style={{ left: '15%', width: '6px', height: '6px', animationDuration: '4s', animationDelay: '0s' }} />
+                <span className="uw-bubble uw-bubble--inwater" style={{ left: '45%', width: '4px', height: '4px', animationDuration: '3.5s', animationDelay: '-1.2s' }} />
+                <span className="uw-bubble uw-bubble--inwater" style={{ left: '75%', width: '8px', height: '8px', animationDuration: '5s', animationDelay: '-0.6s' }} />
+                <span className="uw-bubble uw-bubble--inwater" style={{ left: '88%', width: '5px', height: '5px', animationDuration: '4.5s', animationDelay: '-2s' }} />
+              </>
+            )}
+          </div>
+          <WaterSurface color={color} className="card-water-surface" intensity={1} />
+          <div className="card-crest" style={{ backgroundColor: color, boxShadow: `0 0 18px ${color}` }} />
         </div>
+
+        {/* splash when the wrong answer makes the flood surge */}
+        {answered && !correct && (
+          <div className="uw-splash" style={{ bottom: `${floodPct}%` }}>
+            <span className="uw-ripple" style={{ borderColor: color }} />
+            {SPLASH_DROPS.map((d, i) => (
+              <span
+                key={i}
+                className="uw-splash-drop"
+                style={{
+                  width: `${d.size}px`,
+                  height: `${d.size}px`,
+                  '--dx': `${d.dx}px`,
+                  '--dy': `${d.dy}px`,
+                  '--delay': `${d.delay}s`,
+                } as CSSProperties}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* explanation + next — always above water so they remain usable */}

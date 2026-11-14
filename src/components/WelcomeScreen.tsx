@@ -2,6 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import { BookOpen, Check, Clock, Layers, Play, Wind, Zap, Pencil } from 'lucide-react';
 import FlyingText from '@/components/FlyingText';
 import SubjectCard from '@/components/SubjectCard';
+import WaterSurface from '@/components/WaterSurface';
 import { SUBJECTS, ELEMENT_COLOR, TOPICS, type SubjectExtra } from '@/data/subjects';
 import { loadCustomSets } from '@/lib/customSets';
 import { readableTextOn } from '@/lib/color';
@@ -189,6 +190,21 @@ export default function WelcomeScreen({
             className="pointer-events-none absolute -right-20 -top-24 -z-10 h-72 w-72 rounded-full opacity-40 blur-3xl transition-colors duration-700"
             style={{ background: color }}
           />
+
+          {/* ambient water pooling at the bottom of the briefing */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-28 overflow-hidden"
+          >
+            <WaterSurface
+              color={color}
+              className="absolute inset-x-0 bottom-0 h-24"
+              intensity={0.45}
+            />
+            <span className="uw-bubble uw-bubble--inwater" style={{ left: '16%', width: '6px', height: '6px', animationDuration: '5.4s', animationDelay: '-1.1s' }} />
+            <span className="uw-bubble uw-bubble--inwater" style={{ left: '58%', width: '4px', height: '4px', animationDuration: '4.6s', animationDelay: '-3.2s' }} />
+            <span className="uw-bubble uw-bubble--inwater" style={{ left: '83%', width: '7px', height: '7px', animationDuration: '6.1s', animationDelay: '-0.4s' }} />
+          </div>
 
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="inline-flex items-center gap-2 rounded-full bg-cave-800/80 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.22em] text-steel-50 ring-1 ring-steel-500/60">

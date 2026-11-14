@@ -1,4 +1,5 @@
 import { RotateCcw, Home, Sparkles, Trophy } from 'lucide-react';
+import WaterSurface from '@/components/WaterSurface';
 
 interface Props {
   correct: number;
@@ -22,13 +23,24 @@ export default function ResultScreen({ correct, total, score, onRetry, onHome }:
   return (
     <div className="animate-pop-in">
       <div
-        className="fe-panel relative overflow-hidden p-6 text-center sm:p-10"
+        className="fe-panel relative isolate overflow-hidden p-6 text-center sm:p-10"
         style={{ boxShadow: `0 0 40px ${tier.color}44, 0 8px 24px rgba(0,0,0,0.5)` }}
       >
         <div
           className="absolute inset-0 opacity-25"
           style={{ background: `radial-gradient(circle at 50% 30%, ${tier.color}, transparent 60%)` }}
         />
+
+        {/* ambient water lapping at the bottom */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-24 overflow-hidden"
+        >
+          <WaterSurface color={tier.color} className="absolute inset-x-0 bottom-0 h-20" intensity={0.4} />
+          <span className="uw-bubble uw-bubble--inwater" style={{ left: '22%', width: '5px', height: '5px', animationDuration: '5.1s', animationDelay: '-2.4s' }} />
+          <span className="uw-bubble uw-bubble--inwater" style={{ left: '64%', width: '7px', height: '7px', animationDuration: '6.3s', animationDelay: '-0.9s' }} />
+          <span className="uw-bubble uw-bubble--inwater" style={{ left: '88%', width: '4px', height: '4px', animationDuration: '4.4s', animationDelay: '-3.5s' }} />
+        </div>
         {/* danger stripes top */}
         <div
           className="relative mb-4 h-3 rounded-full"

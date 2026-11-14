@@ -111,62 +111,140 @@ body {
   scrollbar-width: none;
 }
 
-/* === Underwater effects === */
+/* === Water & underwater effects === */
+
+/* Seamless looping wave tiles (see WaterSurface.tsx) */
+.wave-layer {
+  position: absolute;
+  inset: 0;
+  background-repeat: repeat-x;
+  animation-name: wave-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: background-position;
+  pointer-events: none;
+}
+
+@keyframes wave-drift {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -720px;
+  }
+}
+
 @keyframes bubble-rise {
   0% {
-    transform: translateY(0) translateX(0) scale(0.6);
+    transform: translate3d(0, 0, 0) scale(0.55);
+    opacity: 0;
+  }
+  8% {
+    opacity: 0.15;
+  }
+  18% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translate3d(calc(var(--drift, 0px) * 0.6), -48vh, 0) scale(1);
+  }
+  85% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(var(--drift, 0px), -108vh, 0) scale(1.18);
+    opacity: 0;
+  }
+}
+
+@keyframes bubble-rise-body {
+  0% {
+    bottom: -6%;
+    transform: translate3d(0, 0, 0) scale(0.55);
     opacity: 0;
   }
   10% {
-    opacity: 0.7;
+    opacity: 0.85;
   }
   50% {
-    transform: translateY(-50vh) translateX(10px) scale(1);
+    transform: translate3d(calc(var(--drift, 0px) * 0.6), 0, 0) scale(1);
   }
-  90% {
+  85% {
     opacity: 0.5;
   }
   100% {
-    transform: translateY(-100vh) translateX(-6px) scale(1.2);
+    bottom: 104%;
+    transform: translate3d(var(--drift, 0px), 0, 0) scale(1.15);
     opacity: 0;
   }
 }
 
-@keyframes wave-sway {
-  0%, 100% {
-    transform: translateX(-2%) scaleY(1);
-  }
-  50% {
-    transform: translateX(2%) scaleY(1.08);
-  }
-}
-
-@keyframes water-shimmer {
-  0%, 100% {
-    opacity: 0.18;
-    transform: translateX(0);
-  }
-  50% {
-    opacity: 0.32;
-    transform: translateX(8px);
-  }
-}
-
-@keyframes caustic-shift {
+@keyframes mote-drift {
   0% {
-    background-position: 0% 0%;
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.75;
+  }
+  70% {
+    opacity: 0.4;
   }
   100% {
-    background-position: 200% 0%;
+    transform: translate3d(var(--drift, 0px), -110px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes caustic-drift {
+  0% {
+    background-position: 0 0, 0 0;
+  }
+  50% {
+    background-position: 230px 30px, -310px -40px;
+  }
+  100% {
+    background-position: 460px 0, -620px 0;
+  }
+}
+
+@keyframes ray-sway {
+  0%, 100% {
+    transform: rotate(var(--ray-tilt, 10deg)) scaleX(0.85);
+    opacity: calc(var(--ray-alpha, 0.22) * 0.55);
+  }
+  50% {
+    transform: rotate(calc(var(--ray-tilt, 10deg) + 4deg)) scaleX(1.14);
+    opacity: var(--ray-alpha, 0.22);
+  }
+}
+
+@keyframes crest-glow {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scaleY(0.8);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleY(1.2);
   }
 }
 
 @keyframes drown-pulse {
   0%, 100% {
-    box-shadow: inset 0 0 120px rgba(40, 120, 200, 0.5);
+    box-shadow: inset 0 0 120px rgba(40, 120, 200, 0.22);
   }
   50% {
-    box-shadow: inset 0 0 200px rgba(20, 80, 160, 0.75);
+    box-shadow: inset 0 0 200px rgba(20, 80, 160, 0.38);
+  }
+}
+
+@keyframes danger-pulse {
+  0%, 100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.9;
   }
 }
 
@@ -183,39 +261,168 @@ body {
   pointer-events: none;
 }
 
-/* blue tint + vignette over everything */
-.uw-tint {
-  background:
-    radial-gradient(ellipse at 50% 40%, transparent 30%, rgba(20, 70, 130, 0.35) 100%),
-    linear-gradient(180deg, rgba(30, 100, 180, 0.22), rgba(10, 50, 110, 0.45));
-  animation: drown-pulse 2.4s ease-in-out infinite;
+/* ===== Rising tide ===== */
+.uw-water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: height 1s linear;
 }
 
-/* moving caustic light rays */
-.uw-caustics {
-  background-image:
-    repeating-linear-gradient(
-      105deg,
-      transparent 0,
-      transparent 60px,
-      rgba(120, 200, 255, 0.06) 60px,
-      rgba(120, 200, 255, 0.06) 90px,
-      transparent 90px,
-      transparent 160px
-    );
-  background-size: 300% 100%;
-  animation: caustic-shift 8s linear infinite;
+.uw-water-body {
+  position: absolute;
+  inset: 0;
+}
+
+.uw-water-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.uw-water-surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -3.4rem;
+  height: 3.4rem;
+}
+
+.uw-crest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--uw-color, #3b9eff) 22%,
+    #e8f8ff 50%,
+    var(--uw-color, #3b9eff) 78%,
+    transparent 100%
+  );
+  filter: blur(1.5px);
+  animation: crest-glow 3.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ===== Underwater layer cake ===== */
+.uw-tint {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 38%, transparent 30%, rgba(16, 62, 120, 0.26) 100%),
+    linear-gradient(180deg, rgba(70, 160, 255, 0.09), rgba(10, 55, 118, 0.2));
+  animation: drown-pulse 3.2s ease-in-out infinite;
+}
+
+.uw-rays {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
   mix-blend-mode: screen;
 }
 
-/* water surface waves at the top */
-.uw-surface {
+.uw-ray {
+  position: absolute;
+  top: -18%;
+  border-radius: 9999px;
+  background: linear-gradient(
+    180deg,
+    rgba(225, 246, 255, 0.8) 0%,
+    rgba(160, 220, 255, 0.22) 55%,
+    transparent 100%
+  );
+  filter: blur(12px);
+  transform-origin: top center;
+  animation: ray-sway ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* moving caustics — two overlapping light nets */
+.uw-caustics {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      115deg,
+      transparent 0 52px,
+      rgba(190, 235, 255, 0.09) 52px 60px,
+      transparent 60px 128px
+    ),
+    repeating-linear-gradient(
+      64deg,
+      transparent 0 78px,
+      rgba(150, 215, 255, 0.07) 78px 84px,
+      transparent 84px 168px
+    );
+  background-size: 460px 240px, 620px 320px;
+  animation: caustic-drift 20s linear infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.uw-caustics--tide {
+  opacity: 0.6;
+}
+
+.uw-caustics--deep {
+  opacity: 0.42;
+}
+
+/* underside of the surface overhead */
+.uw-ceiling {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 92px;
+  transform: rotate(180deg);
+  opacity: 0.8;
+}
+
+.uw-ceiling-glow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(205, 240, 255, 0.85), transparent);
+  filter: blur(1px);
+  animation: crest-glow 4.2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* floating marine snow */
+.uw-mote {
+  position: absolute;
+  border-radius: 9999px;
+  background: rgba(225, 245, 255, 0.9);
+  box-shadow: 0 0 6px rgba(180, 230, 255, 0.7);
+  animation-name: mote-drift;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  pointer-events: none;
+}
+
+/* vignette */
+.uw-vignette {
+  position: absolute;
+  inset: 0;
   background:
-    radial-gradient(ellipse 50% 16px at 20% 0, rgba(140, 210, 255, 0.25), transparent),
-    radial-gradient(ellipse 50% 16px at 50% 0, rgba(140, 210, 255, 0.2), transparent),
-    radial-gradient(ellipse 50% 16px at 80% 0, rgba(140, 210, 255, 0.25), transparent);
-  height: 40px;
-  animation: wave-sway 3.5s ease-in-out infinite;
+    radial-gradient(ellipse at 50% 42%, transparent 32%, rgba(3, 18, 38, 0.55) 100%),
+    radial-gradient(ellipse at 50% 108%, rgba(120, 200, 255, 0.16), transparent 62%);
+}
+
+/* low air pulse */
+.uw-danger {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 42%, rgba(255, 40, 70, 0.4) 100%);
+  animation: danger-pulse 1.1s ease-in-out infinite;
 }
 
 .uw-content-warp {
@@ -223,14 +430,181 @@ body {
   filter: saturate(0.85) hue-rotate(-8deg) brightness(0.92);
 }
 
-/* individual bubble */
+/* ===== Bubbles ===== */
 .uw-bubble {
   position: absolute;
-  bottom: -20px;
   border-radius: 9999px;
-  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(150, 210, 255, 0.3));
-  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.5);
-  animation: bubble-rise linear infinite;
+  background: radial-gradient(
+    circle at 30% 28%,
+    rgba(255, 255, 255, 0.95) 0 10%,
+    rgba(255, 255, 255, 0.35) 24%,
+    rgba(160, 220, 255, 0.14) 58%,
+    rgba(110, 190, 255, 0.32) 100%
+  );
+  box-shadow:
+    inset 0 0 6px rgba(255, 255, 255, 0.55),
+    0 0 12px rgba(150, 220, 255, 0.3);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.uw-bubble::after {
+  content: '';
+  position: absolute;
+  top: 18%;
+  left: 24%;
+  width: 26%;
+  height: 22%;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.uw-bubble--free {
+  bottom: -24px;
+  animation-name: bubble-rise;
+}
+
+.uw-bubble--inwater {
+  bottom: -6%;
+  animation-name: bubble-rise-body;
+}
+
+/* ===== Splash on flood surge (wrong answer) ===== */
+.uw-splash {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.uw-splash-drop {
+  position: absolute;
+  left: 50%;
+  top: -4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: rgba(210, 243, 255, 0.95);
+  box-shadow: 0 0 8px rgba(170, 225, 255, 0.85);
+  animation: splash-drop 0.9s cubic-bezier(0.2, 0.7, 0.4, 1) both;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes splash-drop {
+  0% {
+    transform: translate(-50%, 0) scale(0.3);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--dx, 0px)), var(--dy, -46px)) scale(1);
+    opacity: 0;
+  }
+}
+
+.uw-ripple {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 120px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(190, 235, 255, 0.8);
+  transform: translate(-50%, -50%);
+  animation: splash-ripple 0.9s ease-out both;
+  pointer-events: none;
+}
+
+@keyframes splash-ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* ===== Question card waterline ===== */
+.card-water-surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -2.2rem;
+  height: 2.2rem;
+}
+
+.card-crest {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 2px;
+  opacity: 0.85;
+  filter: blur(1px);
+  animation: crest-glow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.card-caustics {
+  opacity: 0.35;
+}
+
+/* ===== Compact gauge water (ProgressBar) ===== */.gauge-surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1.15rem;
+  height: 1.15rem;
+}
+
+.gauge-sheen {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    115deg,
+    transparent 0 16px,
+    rgba(255, 255, 255, 0.16) 16px 21px,
+    transparent 21px 46px
+  );
+  background-size: 260px 100%;
+  background-repeat: repeat-x;
+  animation: gauge-drift 5.5s linear infinite;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+@keyframes gauge-drift {
+  from {
+    background-position-x: 0;
+  }
+  to {
+    background-position-x: -260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-layer,
+  .gauge-sheen,
+  .uw-ray,
+  .uw-caustics,
+  .uw-bubble,
+  .uw-mote,
+  .uw-crest,
+  .uw-ceiling-glow,
+  .uw-danger,
+  .uw-tint,
+  .card-crest,
+  .uw-content-warp {
+    animation: none !important;
+  }
 }
 
 @keyframes letter-fly {
