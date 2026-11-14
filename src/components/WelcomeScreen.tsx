@@ -1,10 +1,12 @@
 import type { CSSProperties, ReactNode } from 'react';
-import { BookOpen, Check, Clock, Layers, Play, Wind, Zap, Pencil } from 'lucide-react';
+import { BookOpen, Check, Clock, Layers, Play, Wind, Zap, Pencil, Trophy, Waves } from 'lucide-react';
 import FlyingText from '@/components/FlyingText';
 import SubjectCard from '@/components/SubjectCard';
 import WaterSurface from '@/components/WaterSurface';
+import FloodTank from '@/components/FloodTank';
 import { SUBJECTS, ELEMENT_COLOR, TOPICS, type SubjectExtra } from '@/data/subjects';
 import { loadCustomSets } from '@/lib/customSets';
+import { getBestRun } from '@/lib/storage';
 import { readableTextOn } from '@/lib/color';
 import type { Difficulty, SubjectId } from '@/types';
 
@@ -35,6 +37,33 @@ const STATS = [
 ];
 
 const MODE_COLOR = { sprint: '#ffd43b', topic: '#3b9eff' } as const;
+
+const SURVIVAL_STEPS = [
+  {
+    step: '01',
+    title: 'Відповідай',
+    desc: 'Кожна правильна відповідь — крок до виходу з кімнати.',
+    icon: Zap,
+    color: '#3b9eff',
+    meter: 78,
+  },
+  {
+    step: '02',
+    title: 'Потоп росте',
+    desc: 'Помилка або таймаут піднімають воду на 20% маршруту.',
+    icon: Waves,
+    color: '#ffd43b',
+    meter: 52,
+  },
+  {
+    step: '03',
+    title: 'Бережи повітря',
+    desc: 'Коли вода накриє все — повітря тане щосекунди.',
+    icon: Wind,
+    color: '#fb7185',
+    meter: 28,
+  },
+] as const;
 
 function SectionHeader({
   step, title, meta, color = '#ffd43b',
@@ -170,6 +199,8 @@ export default function WelcomeScreen({
   const activeTopic = topics.find((t) => t.id === topicId);
   const modeLabel = mode === 'sprint' ? 'Спринт' : (activeTopic?.label ?? 'Тема');
   const customCount = loadCustomSets().length;
+  const bestRun = getBestRun();
+  const bestAccuracy = bestRun && bestRun.total > 0 ? Math.round((bestRun.correct / bestRun.total) * 100) : 0;
 
   return (
     <div className="animate-pop-in space-y-6 sm:space-y-7">
@@ -244,10 +275,13 @@ export default function WelcomeScreen({
             </h2>
           </div>
 
-          <p className="mt-4 max-w-xl text-[13px] leading-relaxed text-steel-50/85 sm:text-sm">
-            Чим довше сидиш на питанні — тим вищий потоп. Коли вода дістане повітря, починається
-            відлік. Відповідай швидко: поки є повітря — є шанс.
-          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1fr)_215px] sm:items-end sm:gap-5">
+            <p className="max-w-xl text-[13px] leading-relaxed text-steel-50/85 sm:text-sm">
+              Чим довше сидиш на питанні — тим вищий потоп. Коли вода дістане повітря, починається
+              відлік. Відповідай швидко: поки є повітря — є шанс.
+            </p>
+            <FloodTank color={color} className="w-full sm:max-w-[215px] sm:justify-self-end" />
+          </div>
 
           <div className="mt-5 grid grid-cols-3 gap-2">
             {STATS.map((s) => {
@@ -379,28 +413,110 @@ export default function WelcomeScreen({
         </div>
       </section>
 
-      {/* ===== Editor entry ===== */}
-      <section className="fe-panel flex items-center justify-between gap-3 p-4 sm:p-5">
-        <div className="flex min-w-0 items-center gap-3">
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-volt/15 text-volt ring-1 ring-volt/40">
-            <Pencil className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <p className="font-display text-xs font-extrabold uppercase tracking-wide text-white">
-              Редактор завдань
-            </p>
-            <p className="truncate text-[11px] text-steel-100">
-              Створюй свої тести та ділись з іншими · {customCount} збережено
-            </p>
+      {/* ===== 04 · Survival guide ===== */}
+      <section>
+        <SectionHeader step="04" title="Як вижити" meta="3 кроки" color="#34d399" />
+        <div className="grid gap-2.5 sm:grid-cols-3">
+          {SURVIVAL_STEPS.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.step} className="survival-card" style={{ '--step-color': s.color } as CSSProperties}>
+                <div className="flex items-center justify-between">
+                  <span
+                    className="flex h-7 w-7 items-center justify-center rounded-md font-display text-[11px] font-extrabold tabular-nums"
+                    style={{ backgroundColor: `${s.color}1f`, color: s.color, boxShadow: `inset 0 0 0 1px ${s.color}55` }}
+                  >
+                    {s.step}
+                  </span>
+                  <Icon className="h-4 w-4" style={{ color: s.color }} />
+                </div>
+                <p className="mt-2 font-display text-xs font-extrabold uppercase tracking-wide text-white">
+                  <FlyingText text={s.title} />
+                </p>
+                <p className="mt-1 text-[11px] leading-snug text-steel-50/80">{s.desc}</p>
+                <div className="mini-meter" aria-hidden="true">
+                  <span
+                    className="mini-meter__fill"
+                    style={{
+                      width: `${s.meter}%`,
+                      backgroundImage: `linear-gradient(90deg, ${s.color}55, ${s.color})`,
+                      boxShadow: `0 0 10px ${s.color}66`,
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ===== Record + editor ===== */}
+      <section className="grid gap-2.5 sm:grid-cols-2">
+        <div className="fe-panel relative isolate overflow-hidden p-4">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -right-10 -top-12 -z-10 h-32 w-32 rounded-full bg-volt/20 blur-2xl"
+          />
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-volt/15 text-volt ring-1 ring-volt/40">
+              <Trophy className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="font-display text-xs font-extrabold uppercase tracking-wide text-white">
+                Особистий рекорд
+              </p>
+              <p className="truncate text-[11px] text-steel-100">
+                {bestRun
+                  ? `${bestRun.score} балів · точність ${bestAccuracy}%`
+                  : 'Ще немає забігів — час тікати від потопу'}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3 grid grid-cols-3 gap-1.5">
+            {[
+              { value: bestRun ? bestRun.score : '—', label: 'бали', color: '#ffd43b' },
+              { value: bestRun ? `${bestAccuracy}%` : '—', label: 'точність', color: '#34d399' },
+              { value: bestRun ? bestRun.correct : '—', label: 'вірно', color: '#3b9eff' },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-lg px-2 py-1.5 text-center"
+                style={{ backgroundColor: `${stat.color}14`, boxShadow: `inset 0 0 0 1px ${stat.color}33` }}
+              >
+                <p className="font-display text-sm font-extrabold leading-none tabular-nums" style={{ color: stat.color }}>
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-[8px] font-extrabold uppercase tracking-[0.12em] text-steel-100">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
-        <button
-          onClick={onOpenEditor}
-          className="fe-btn inline-flex shrink-0 items-center gap-1.5 px-4 py-2.5 text-xs"
-          style={{ backgroundColor: '#3b9eff', color: '#fff' }}
-        >
-          Відкрити
-        </button>
+
+        <div className="fe-panel flex items-center justify-between gap-3 p-4">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-water/15 text-water ring-1 ring-water/40">
+              <Pencil className="h-5 w-5" />
+            </span>
+            <div className="min-w-0">
+              <p className="font-display text-xs font-extrabold uppercase tracking-wide text-white">
+                Редактор завдань
+              </p>
+              <p className="truncate text-[11px] text-steel-100">
+                Створюй свої тести та ділись з іншими · {customCount} збережено
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenEditor}
+            className="fe-btn inline-flex shrink-0 items-center gap-1.5 px-3.5 py-2.5 text-xs"
+            style={{ backgroundColor: '#3b9eff', color: '#fff' }}
+          >
+            Відкрити
+          </button>
+        </div>
       </section>
 
       {/* ===== Launch ===== */}

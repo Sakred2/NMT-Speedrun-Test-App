@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>QA run</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #0f1115; }
+      iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; }
+    </style>
+  </head>
+  <body>
+    <iframe id="f" src="/"></iframe>
+    <script>
+      const frame = document.getElementById('f');
+      frame.addEventListener('load', () => {
+        const doc = frame.contentDocument;
+        const timer = setInterval(() => {
+          const btn = [...doc.querySelectorAll('button')].find((b) =>
+            (b.textContent || '').replace(/\s+/g, ' ').includes('Почати'),
+          );
+          if (btn) {
+            clearInterval(timer);
+            btn.click();
+          }
+        }, 120);
+      });
+    </script>
+  </body>
+</html>

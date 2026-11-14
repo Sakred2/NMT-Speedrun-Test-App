@@ -9,8 +9,10 @@ import ResultScreen from '@/components/ResultScreen';
 import ErrorScreen from '@/components/ErrorScreen';
 import DrownedScreen from '@/components/DrownedScreen';
 import UnderwaterOverlay from '@/components/UnderwaterOverlay';
+import RunBanner from '@/components/RunBanner';
+import RunSidebar from '@/components/RunSidebar';
 import { fetchQuestions } from '@/lib/openrouter';
-import { getApiKey, getSoundOn, saveSoundOn } from '@/lib/storage';
+import { getApiKey, getSoundOn, saveSoundOn, recordBestRun } from '@/lib/storage';
 import { pickMockQuestions } from '@/data/mockQuestions';
 import { SUBJECTS, type Element } from '@/data/subjects';
 import { CustomSet, decodeSet, upsertSet } from '@/lib/customSets';
@@ -22,7 +24,7 @@ const QUESTION_COUNT = 15;
 // Per-question time limit (auto-lock if exceeded). Flood rises across the whole test.
 const TIME_PER_QUESTION = 18;
 // Total seconds for flood to reach 100% across the whole run.
-const FLOOD_MAX_SECONDS = QUESTION_COUNT * TIME_PER_QUESTION; // ~140s
+const FLOOD_MAX_SECONDS = 4; // TEMP: visual QA
 const MAX_AIR = 100;
 // Air drain rates per difficulty (per second while flooded)
 const DRAIN_RATES: Record<Difficulty, number> = { easy: 2, normal: 4, hard: 10 };
@@ -58,8 +60,8 @@ function App() {
   const [air, setAir] = useState(MAX_AIR);
   const [questionElapsed, setQuestionElapsed] = useState(0); // per-question countdown
 
-  const activeElement: Element =
-    (SUBJECTS.find((s) => s.id === subject)?.element) ?? 'water';
+  const activeSubject = SUBJECTS.find((s) => s.id === subject) ?? SUBJECTS[0];
+  const activeElement: Element = activeSubject.element;
 
   const floodPct = Math.min(100, (elapsed / FLOOD_MAX_SECONDS) * 100);
   const flooded = screen === 'test' && elapsed >= FLOOD_MAX_SECONDS;
@@ -142,6 +144,7 @@ function App() {
   useEffect(() => {
     if (screen === 'test' && air <= 0) {
       clearTimer();
+      recordBestRun(score, correctCount, questions.length);
       setAnswered(true);
       setSelected((s) => s);
       setScreen('drowned');
@@ -235,6 +238,7 @@ function App() {
 
   function handleNext() {
     if (current + 1 >= questions.length) {
+      recordBestRun(score, correctCount, questions.length);
       setScreen('result');
       pauseMusic();
       playSound('complete');
@@ -289,7 +293,7 @@ function App() {
         onSaved={() => {}}
       />
 
-      <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+      <main className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${screen === 'test' ? 'max-w-5xl' : 'max-w-3xl'}`}>
         {screen === 'welcome' && (
           <WelcomeScreen
             subject={subject}
@@ -307,27 +311,60 @@ function App() {
         )}
 
         {screen === 'test' && questions[current] && (
-          <div className={`fe-panel p-5 sm:p-7 ${flooded ? 'uw-content-warp' : ''}`}>
-            <ProgressBar
+          <div className="run-layout">
+            <div className={`run-panel fe-panel ${flooded ? 'uw-content-warp' : ''}`}>
+              <div className="hazard-strip relative z-10 h-2 w-full" aria-hidden="true" />
+              <div className="run-wall" aria-hidden="true" />
+              <div className="relative z-10 px-3.5 py-4 sm:px-5 sm:py-5">
+                <RunBanner
+                  current={current}
+                  total={questions.length}
+                  subjectLabel={activeSubject.label}
+                  icon={activeSubject.icon}
+                  element={activeElement}
+                  floodPct={floodPct}
+                  flooded={flooded}
+                  questionElapsed={questionElapsed}
+                  maxSeconds={TIME_PER_QUESTION}
+                />
+                <div className="mt-4">
+                  <ProgressBar
+                    current={current}
+                    total={questions.length}
+                    score={score}
+                    elapsed={elapsed}
+                    floodMax={FLOOD_MAX_SECONDS}
+                    air={air}
+                    element={activeElement}
+                  />
+                </div>
+                <QuestionCard
+                  key={questions[current].id}
+                  question={questions[current]}
+                  index={current}
+                  total={questions.length}
+                  selectedIndex={selected}
+                  answered={answered}
+                  element={activeElement}
+                  floodPct={Math.min(100, floodPct)}
+                  onSelect={handleSelect}
+                  onNext={handleNext}
+                />
+              </div>
+              <div className="hazard-strip relative z-10 h-1.5 w-full opacity-60" aria-hidden="true" />
+            </div>
+
+            <RunSidebar
               current={current}
               total={questions.length}
               score={score}
-              elapsed={elapsed}
-              floodMax={FLOOD_MAX_SECONDS}
+              correct={correctCount}
+              floodPct={floodPct}
+              flooded={flooded}
               air={air}
+              questionElapsed={questionElapsed}
+              maxSeconds={TIME_PER_QUESTION}
               element={activeElement}
-            />
-            <QuestionCard
-              key={questions[current].id}
-              question={questions[current]}
-              index={current}
-              total={questions.length}
-              selectedIndex={selected}
-              answered={answered}
-              element={activeElement}
-              floodPct={Math.min(100, (elapsed / FLOOD_MAX_SECONDS) * 100)}
-              onSelect={handleSelect}
-              onNext={handleNext}
             />
           </div>
         )}

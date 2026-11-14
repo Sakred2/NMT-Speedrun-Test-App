@@ -4,6 +4,7 @@ const MODEL_KEY = 'nmt-openrouter-model';
 const MUSIC_VOL_KEY = 'nmt-music-volume';
 const SFX_VOL_KEY = 'nmt-sfx-volume';
 const MUSIC_ON_KEY = 'nmt-music-on';
+const BEST_RUN_KEY = 'nmt-best-run';
 
 export function getApiKey(): string | null {
   try {
@@ -115,4 +116,41 @@ export function saveSfxVolume(v: number): void {
   } catch {
     // ignore
   }
+}
+
+export interface BestRun {
+  score: number;
+  correct: number;
+  total: number;
+  at: number;
+}
+
+export function getBestRun(): BestRun | null {
+  try {
+    const raw = localStorage.getItem(BEST_RUN_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as Partial<BestRun>;
+    if (typeof parsed.score !== 'number' || !Number.isFinite(parsed.score)) return null;
+    return {
+      score: parsed.score,
+      correct: typeof parsed.correct === 'number' ? parsed.correct : 0,
+      total: typeof parsed.total === 'number' ? parsed.total : 0,
+      at: typeof parsed.at === 'number' ? parsed.at : 0,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/** Saves the run if it beats the stored record. Returns true when it is a new best. */
+export function recordBestRun(score: number, correct: number, total: number): boolean {
+  const prev = getBestRun();
+  if (prev && score <= prev.score) return false;
+  const run: BestRun = { score, correct, total, at: Date.now() };
+  try {
+    localStorage.setItem(BEST_RUN_KEY, JSON.stringify(run));
+  } catch {
+    // ignore
+  }
+  return true;
 }

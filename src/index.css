@@ -561,8 +561,8 @@ body {
   position: absolute;
   left: 0;
   right: 0;
-  top: -1.15rem;
-  height: 1.15rem;
+  top: -0.5rem;
+  height: 0.6rem;
 }
 
 .gauge-sheen {
@@ -590,6 +590,462 @@ body {
   }
 }
 
+/* ===== Run screen chrome ===== */
+.run-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .run-layout {
+    grid-template-columns: minmax(0, 1fr) 196px;
+  }
+}
+
+.run-panel {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.run-wall {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(120% 90% at 50% -30%, rgba(90, 170, 255, 0.1), transparent 65%),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.028) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.22) 0 1px, transparent 1px 56px),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.012) 0 2px, transparent 2px 20px);
+}
+
+.run-wall::before,
+.run-wall::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 24px,
+      rgba(255, 255, 255, 0.1) 24px 26px,
+      transparent 26px 50px
+    ),
+    linear-gradient(90deg, #10131a, #2a2f38 40%, #1a1e25 72%, #0f1218);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 0 14px rgba(0, 0, 0, 0.45);
+  opacity: 0.85;
+}
+
+.run-wall::before {
+  left: 0;
+}
+
+.run-wall::after {
+  right: 0;
+}
+
+/* run banner */
+.run-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  padding: 0.5rem 0.6rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.run-banner__door {
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.6rem;
+  color: #0b0d11;
+  box-shadow:
+    inset 0 2px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -3px 0 rgba(0, 0, 0, 0.25),
+    0 6px 14px -6px rgba(0, 0, 0, 0.9);
+}
+
+.run-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-family: 'Baloo 2', Nunito, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #cfd4dd;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.run-chip__dot {
+  height: 5px;
+  width: 5px;
+  border-radius: 9999px;
+  box-shadow: 0 0 6px currentColor;
+  animation: pulse-glow 1.6s ease-in-out infinite;
+}
+
+.run-ring {
+  position: relative;
+  display: flex;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+}
+
+.run-ring__inner {
+  position: absolute;
+  inset: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: #14161c;
+  font-family: 'Baloo 2', Nunito, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.run-ring--lg {
+  height: 3.25rem;
+  width: 3.25rem;
+}
+
+.run-ring--lg .run-ring__inner {
+  inset: 4px;
+  font-size: 14px;
+}
+
+.run-ring--urgent {
+  animation: danger-pulse 1s ease-in-out infinite;
+}
+
+.run-banner__flood {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  opacity: 0.9;
+  transition: width 1s linear;
+}
+
+/* ===== Run HUD sidebar ===== */
+.run-sidebar {
+  display: none;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+@media (min-width: 768px) {
+  .run-sidebar {
+    position: sticky;
+    top: 5.5rem;
+    display: flex;
+  }
+}
+
+.hud-card {
+  border-radius: 0.85rem;
+  background: rgba(20, 23, 29, 0.85);
+  padding: 0.6rem;
+  box-shadow:
+    inset 0 0 0 1px rgba(107, 118, 134, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 18px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.hud-head {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.45rem;
+  font-family: 'Baloo 2', Nunito, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b7686;
+}
+
+.depth-tube {
+  position: relative;
+  height: 132px;
+  overflow: hidden;
+  border-radius: 0.55rem;
+  background: linear-gradient(180deg, #0a0d12, #10141a);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 6px 14px rgba(0, 0, 0, 0.6);
+}
+
+.depth-fill {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: height 1s linear;
+}
+
+.depth-fill__inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.depth-surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -13px;
+  height: 15px;
+}
+
+.depth-caustics {
+  opacity: 0.5;
+  background-size: 180px 120px, 240px 160px;
+}
+
+.depth-ticks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4px 5px;
+}
+
+.depth-tick {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.depth-tick__line {
+  height: 1px;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.depth-tick__label {
+  width: 10px;
+  text-align: right;
+  font-family: 'Baloo 2', Nunito, sans-serif;
+  font-size: 7px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.38);
+}
+
+.depth-tube__glare {
+  position: absolute;
+  left: 3px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent);
+  pointer-events: none;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.3rem;
+}
+
+.room-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 0.25rem;
+  font-family: 'Baloo 2', Nunito, sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+}
+
+.room-tile--active {
+  animation: room-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes room-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08);
+    filter: brightness(1.25);
+  }
+}
+
+/* ===== Lobby flood tank ===== */
+.flood-tank {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  border-radius: 0.8rem;
+  padding: 0.5rem 0.6rem;
+  background: rgba(15, 17, 21, 0.78);
+  box-shadow:
+    inset 0 0 0 1px rgba(107, 118, 134, 0.35),
+    0 10px 24px -12px rgba(0, 0, 0, 0.8);
+}
+
+.flood-tank__live {
+  height: 5px;
+  width: 5px;
+  border-radius: 9999px;
+  box-shadow: 0 0 8px currentColor;
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
+.flood-tank__glass {
+  position: relative;
+  height: 76px;
+  overflow: hidden;
+  border-radius: 0.45rem;
+  background: linear-gradient(180deg, #0a0d12, #0f1319);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 8px 18px rgba(0, 0, 0, 0.65);
+}
+
+.flood-tank__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.flood-tank__water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 42%;
+  animation: tank-rise 7s ease-in-out infinite;
+}
+
+.flood-tank__water-inner {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.flood-tank__water-body {
+  position: absolute;
+  inset: 0;
+}
+
+.flood-tank__surface {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -11px;
+  height: 13px;
+}
+
+.flood-tank__runner {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  animation: tank-bob 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6));
+}
+
+.flood-tank__mark {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 9px;
+  color: #fbbf24;
+  animation: danger-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes tank-rise {
+  0%, 100% {
+    height: 38%;
+  }
+  50% {
+    height: 64%;
+  }
+}
+
+@keyframes tank-bob {
+  0%, 100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -3px);
+  }
+}
+
+/* ===== Lobby survival cards ===== */
+.survival-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.85rem;
+  padding: 0.75rem;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.04), rgba(15, 17, 21, 0.9) 60%);
+  box-shadow:
+    inset 0 0 0 1px rgba(107, 118, 134, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.mini-meter {
+  margin-top: 0.6rem;
+  height: 4px;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.mini-meter__fill {
+  display: block;
+  height: 100%;
+  border-radius: 9999px;
+}
+
+@media (max-width: 419px) {
+  .run-chip--optional {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wave-layer,
   .gauge-sheen,
@@ -602,7 +1058,14 @@ body {
   .uw-danger,
   .uw-tint,
   .card-crest,
-  .uw-content-warp {
+  .uw-content-warp,
+  .flood-tank__water,
+  .flood-tank__runner,
+  .flood-tank__live,
+  .flood-tank__mark,
+  .run-ring--urgent,
+  .run-chip__dot,
+  .room-tile--active {
     animation: none !important;
   }
 }
