@@ -12,7 +12,10 @@ import UnderwaterOverlay from '@/components/UnderwaterOverlay';
 import RunBanner from '@/components/RunBanner';
 import RunSidebar from '@/components/RunSidebar';
 import { fetchQuestions } from '@/lib/openrouter';
-import { getApiKey, getSoundOn, saveSoundOn, recordBestRun, getDeviceMode, type DeviceMode } from '@/lib/storage';
+import {
+  getApiKey, getSoundOn, saveSoundOn, recordBestRun, getDeviceMode, getThemeMode,
+  type DeviceMode, type ThemeMode,
+} from '@/lib/storage';
 import { pickMockQuestions } from '@/data/mockQuestions';
 import { SUBJECTS, type Element } from '@/data/subjects';
 import { CustomSet, decodeSet, upsertSet } from '@/lib/customSets';
@@ -53,6 +56,7 @@ function App() {
   const [errorMsg, setErrorMsg] = useState('');
   const [soundOn, setSoundOn] = useState(getSoundOn);
   const [deviceMode, setDeviceMode] = useState<DeviceMode>(getDeviceMode());
+  const [themeMode, setThemeMode] = useState<ThemeMode>(getThemeMode());
   const [editorInitialSet, setEditorInitialSet] = useState<CustomSet | null>(null);
   const [importedToast, setImportedToast] = useState<string | null>(null);
 
@@ -79,6 +83,10 @@ function App() {
   useEffect(() => {
     setSoundEnabled(soundOn);
   }, [soundOn]);
+
+  useEffect(() => {
+    document.body.dataset.theme = themeMode;
+  }, [themeMode]);
 
   // Import a shared set from the URL (?set=...)
   useEffect(() => {
@@ -299,6 +307,8 @@ function App() {
         onClose={() => setSettingsOpen(false)}
         deviceMode={deviceMode}
         onDeviceModeChange={setDeviceMode}
+        themeMode={themeMode}
+        onThemeModeChange={setThemeMode}
         onSaved={() => {}}
       />
 

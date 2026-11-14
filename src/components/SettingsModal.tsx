@@ -14,7 +14,7 @@ import {
   getModel, saveModel,
   getMusicOn, saveMusicOn, getMusicVolume, saveMusicVolume,
   getSfxVolume, saveSfxVolume,
-  saveDeviceMode, type DeviceMode,
+  saveDeviceMode, saveThemeMode, type DeviceMode, type ThemeMode,
 } from '@/lib/storage';
 import { setMusicVol as setMusicModuleVol, applyMusicSettings } from '@/lib/music';
 import { refreshSfxVolume } from '@/lib/sounds';
@@ -25,6 +25,8 @@ interface Props {
   onSaved: () => void;
   deviceMode: DeviceMode;
   onDeviceModeChange: (mode: DeviceMode) => void;
+  themeMode: ThemeMode;
+  onThemeModeChange: (mode: ThemeMode) => void;
 }
 
 type TestState = 'idle' | 'testing' | 'done';
@@ -60,11 +62,20 @@ function SectionTitle({
   );
 }
 
-export default function SettingsModal({ open, onClose, onSaved, deviceMode, onDeviceModeChange }: Props) {
+export default function SettingsModal({
+  open,
+  onClose,
+  onSaved,
+  deviceMode,
+  onDeviceModeChange,
+  themeMode,
+  onThemeModeChange,
+}: Props) {
   const [value, setValue] = useState(getApiKey() ?? '');
   const [show, setShow] = useState(false);
   const [saved, setSaved] = useState(false);
   const [activeDeviceMode, setActiveDeviceMode] = useState<DeviceMode>(deviceMode);
+  const [activeThemeMode, setActiveThemeMode] = useState<ThemeMode>(themeMode);
 
   const [model, setModel] = useState(getModel() || DEFAULT_MODEL);
   const [modelOpen, setModelOpen] = useState(false);
@@ -78,7 +89,8 @@ export default function SettingsModal({ open, onClose, onSaved, deviceMode, onDe
 
   useEffect(() => {
     setActiveDeviceMode(deviceMode);
-  }, [deviceMode, open]);
+    setActiveThemeMode(themeMode);
+  }, [deviceMode, themeMode, open]);
 
   if (!open) return null;
 
@@ -89,7 +101,9 @@ export default function SettingsModal({ open, onClose, onSaved, deviceMode, onDe
     saveMusicVolume(musicVol);
     saveSfxVolume(sfxVol);
     saveDeviceMode(activeDeviceMode);
+    saveThemeMode(activeThemeMode);
     onDeviceModeChange(activeDeviceMode);
+    onThemeModeChange(activeThemeMode);
     setMusicModuleVol(musicVol);
     applyMusicSettings();
     refreshSfxVolume();
@@ -377,6 +391,46 @@ export default function SettingsModal({ open, onClose, onSaved, deviceMode, onDe
                           {option.short}
                         </span>
                         {active && <Check className="h-4 w-4 text-water" />}
+                      </div>
+                      <p className="mt-2 text-base font-black text-white">{option.label}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-steel-100">{option.hint}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section className="md:col-span-2">
+              <SectionTitle
+                icon={<Sparkles className="h-4 w-4" />}
+                title="Теми"
+                hint="Кольорові стилі • без зміни дизайну"
+                color="#c084fc"
+              />
+
+              <div className="grid gap-3 rounded-2xl border border-steel-500/60 bg-cave-400/70 p-4 sm:grid-cols-2 lg:grid-cols-5 sm:p-5">
+                {[
+                  { id: 'classic', label: 'Класична', accent: '#3b9eff', hint: 'Початковий стиль' },
+                  { id: 'midnight', label: 'Ніч', accent: '#8b5cf6', hint: 'Темний акцент' },
+                  { id: 'sunset', label: 'Захід', accent: '#f59e0b', hint: 'Теплі тони' },
+                  { id: 'ocean', label: 'Океан', accent: '#22d3ee', hint: 'Блакитне море' },
+                  { id: 'forest', label: 'Ліс', accent: '#34d399', hint: 'Спокійна гама' },
+                ].map((option) => {
+                  const active = activeThemeMode === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setActiveThemeMode(option.id as ThemeMode)}
+                      className={`rounded-2xl border p-3 text-left transition ${
+                        active
+                          ? 'border-steel-200/80 bg-steel-500/30 text-white shadow-[0_0_0_1px_rgba(255,255,255,0.2)]'
+                          : 'border-steel-500/60 bg-cave-500/40 text-steel-50 hover:border-steel-300/70 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="h-3 w-3 rounded-full" style={{ backgroundColor: option.accent }} />
+                        {active && <Check className="h-4 w-4 text-white" />}
                       </div>
                       <p className="mt-2 text-base font-black text-white">{option.label}</p>
                       <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-steel-100">{option.hint}</p>

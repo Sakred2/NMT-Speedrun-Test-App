@@ -6,6 +6,38 @@
 
 :root {
   color-scheme: dark;
+  --theme-accent: #3b9eff;
+  --theme-accent-2: #ffd43b;
+  --theme-glow-1: rgba(59, 158, 255, 0.06);
+  --theme-glow-2: rgba(255, 122, 61, 0.05);
+}
+
+body[data-theme='midnight'] {
+  --theme-accent: #8b5cf6;
+  --theme-accent-2: #a78bfa;
+  --theme-glow-1: rgba(139, 92, 246, 0.11);
+  --theme-glow-2: rgba(168, 85, 247, 0.08);
+}
+
+body[data-theme='sunset'] {
+  --theme-accent: #f59e0b;
+  --theme-accent-2: #fb7185;
+  --theme-glow-1: rgba(245, 158, 11, 0.1);
+  --theme-glow-2: rgba(251, 113, 133, 0.08);
+}
+
+body[data-theme='ocean'] {
+  --theme-accent: #22d3ee;
+  --theme-accent-2: #3b82f6;
+  --theme-glow-1: rgba(34, 211, 238, 0.1);
+  --theme-glow-2: rgba(59, 130, 246, 0.08);
+}
+
+body[data-theme='forest'] {
+  --theme-accent: #34d399;
+  --theme-accent-2: #84cc16;
+  --theme-glow-1: rgba(52, 211, 153, 0.1);
+  --theme-glow-2: rgba(132, 204, 22, 0.08);
 }
 
 html,
@@ -17,8 +49,8 @@ body,
 body {
   @apply bg-cave-500 text-white font-sans antialiased;
   background-image:
-    radial-gradient(circle at 20% 0%, rgba(59, 158, 255, 0.06), transparent 45%),
-    radial-gradient(circle at 80% 100%, rgba(255, 122, 61, 0.05), transparent 45%),
+    radial-gradient(circle at 20% 0%, var(--theme-glow-1), transparent 45%),
+    radial-gradient(circle at 80% 100%, var(--theme-glow-2), transparent 45%),
     repeating-linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.012),
@@ -26,6 +58,17 @@ body {
       transparent 2px,
       transparent 22px
     );
+}
+
+body[data-theme='midnight'] .hazard-strip,
+body[data-theme='midnight'] .fe-btn,
+body[data-theme='sunset'] .hazard-strip,
+body[data-theme='sunset'] .fe-btn,
+body[data-theme='ocean'] .hazard-strip,
+body[data-theme='ocean'] .fe-btn,
+body[data-theme='forest'] .hazard-strip,
+body[data-theme='forest'] .fe-btn {
+  filter: saturate(1.08);
 }
 
 /* Chunky beveled block button — Flood Escape 2 style */

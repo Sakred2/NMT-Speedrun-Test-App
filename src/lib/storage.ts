@@ -6,8 +6,10 @@ const SFX_VOL_KEY = 'nmt-sfx-volume';
 const MUSIC_ON_KEY = 'nmt-music-on';
 const BEST_RUN_KEY = 'nmt-best-run';
 const DEVICE_MODE_KEY = 'nmt-device-mode';
+const THEME_MODE_KEY = 'nmt-theme-mode';
 
 export type DeviceMode = 'mobile' | 'tablet' | 'desktop';
+export type ThemeMode = 'classic' | 'midnight' | 'sunset' | 'ocean' | 'forest';
 
 export function getApiKey(): string | null {
   try {
@@ -46,6 +48,25 @@ export function getDeviceMode(): DeviceMode {
 export function saveDeviceMode(mode: DeviceMode): void {
   try {
     localStorage.setItem(DEVICE_MODE_KEY, mode);
+  } catch {
+    // ignore quota / privacy errors
+  }
+}
+
+export function getThemeMode(): ThemeMode {
+  try {
+    const value = localStorage.getItem(THEME_MODE_KEY);
+    return value === 'classic' || value === 'midnight' || value === 'sunset' || value === 'ocean' || value === 'forest'
+      ? value
+      : 'classic';
+  } catch {
+    return 'classic';
+  }
+}
+
+export function saveThemeMode(mode: ThemeMode): void {
+  try {
+    localStorage.setItem(THEME_MODE_KEY, mode);
   } catch {
     // ignore quota / privacy errors
   }
