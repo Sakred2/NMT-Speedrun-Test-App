@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   X, KeyRound, Trash2, Check, Eye, EyeOff, Sparkles, ExternalLink,
   Loader2, AlertCircle, Zap, ChevronDown, Cpu, Music, Volume2, VolumeX,
@@ -14,6 +14,7 @@ import {
   getModel, saveModel,
   getMusicOn, saveMusicOn, getMusicVolume, saveMusicVolume,
   getSfxVolume, saveSfxVolume,
+  saveDeviceMode, type DeviceMode,
 } from '@/lib/storage';
 import { setMusicVol as setMusicModuleVol, applyMusicSettings } from '@/lib/music';
 import { refreshSfxVolume } from '@/lib/sounds';
@@ -22,6 +23,8 @@ interface Props {
   open: boolean;
   onClose: () => void;
   onSaved: () => void;
+  deviceMode: DeviceMode;
+  onDeviceModeChange: (mode: DeviceMode) => void;
 }
 
 type TestState = 'idle' | 'testing' | 'done';
@@ -57,10 +60,11 @@ function SectionTitle({
   );
 }
 
-export default function SettingsModal({ open, onClose, onSaved }: Props) {
+export default function SettingsModal({ open, onClose, onSaved, deviceMode, onDeviceModeChange }: Props) {
   const [value, setValue] = useState(getApiKey() ?? '');
   const [show, setShow] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [activeDeviceMode, setActiveDeviceMode] = useState<DeviceMode>(deviceMode);
 
   const [model, setModel] = useState(getModel() || DEFAULT_MODEL);
   const [modelOpen, setModelOpen] = useState(false);
@@ -72,6 +76,10 @@ export default function SettingsModal({ open, onClose, onSaved }: Props) {
   const [musicVol, setMusicVol] = useState(getMusicVolume());
   const [sfxVol, setSfxVol] = useState(getSfxVolume());
 
+  useEffect(() => {
+    setActiveDeviceMode(deviceMode);
+  }, [deviceMode, open]);
+
   if (!open) return null;
 
   function handleSave() {
@@ -80,6 +88,8 @@ export default function SettingsModal({ open, onClose, onSaved }: Props) {
     saveMusicOn(musicOn);
     saveMusicVolume(musicVol);
     saveSfxVolume(sfxVol);
+    saveDeviceMode(activeDeviceMode);
+    onDeviceModeChange(activeDeviceMode);
     setMusicModuleVol(musicVol);
     applyMusicSettings();
     refreshSfxVolume();
@@ -333,6 +343,46 @@ export default function SettingsModal({ open, onClose, onSaved }: Props) {
                     <p>{testResult.message}</p>
                   </div>
                 )}
+              </div>
+            </section>
+
+            <section className="md:col-span-2">
+              <SectionTitle
+                icon={<Settings className="h-4 w-4" />}
+                title="Відображення"
+                hint="Мобільна / планшет / ПК"
+                color="#67e8f9"
+              />
+
+              <div className="grid gap-3 rounded-2xl border border-steel-500/60 bg-cave-400/70 p-4 sm:grid-cols-3 sm:p-5">
+                {[
+                  { id: 'mobile', label: 'Мобільна', short: 'Моб.', hint: 'Узеньшена ширина' },
+                  { id: 'tablet', label: 'Планшет', short: 'Планш.', hint: 'Середня ширина' },
+                  { id: 'desktop', label: 'Комп’ютер', short: 'ПК', hint: 'Повна ширина' },
+                ].map((option) => {
+                  const active = activeDeviceMode === option.id;
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      onClick={() => setActiveDeviceMode(option.id as DeviceMode)}
+                      className={`rounded-2xl border p-3 text-left transition ${
+                        active
+                          ? 'border-water/60 bg-water/10 text-white shadow-[0_0_0_1px_rgba(103,232,249,0.4)]'
+                          : 'border-steel-500/60 bg-cave-500/40 text-steel-50 hover:border-steel-300/70 hover:text-white'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-display text-[11px] font-extrabold uppercase tracking-[0.14em]">
+                          {option.short}
+                        </span>
+                        {active && <Check className="h-4 w-4 text-water" />}
+                      </div>
+                      <p className="mt-2 text-base font-black text-white">{option.label}</p>
+                      <p className="mt-1 text-[10px] uppercase tracking-[0.12em] text-steel-100">{option.hint}</p>
+                    </button>
+                  );
+                })}
               </div>
             </section>
 

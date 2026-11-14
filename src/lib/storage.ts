@@ -5,6 +5,9 @@ const MUSIC_VOL_KEY = 'nmt-music-volume';
 const SFX_VOL_KEY = 'nmt-sfx-volume';
 const MUSIC_ON_KEY = 'nmt-music-on';
 const BEST_RUN_KEY = 'nmt-best-run';
+const DEVICE_MODE_KEY = 'nmt-device-mode';
+
+export type DeviceMode = 'mobile' | 'tablet' | 'desktop';
 
 export function getApiKey(): string | null {
   try {
@@ -28,6 +31,23 @@ export function clearApiKey(): void {
     localStorage.removeItem(KEY);
   } catch {
     // ignore
+  }
+}
+
+export function getDeviceMode(): DeviceMode {
+  try {
+    const value = localStorage.getItem(DEVICE_MODE_KEY);
+    return value === 'mobile' || value === 'tablet' || value === 'desktop' ? value : 'desktop';
+  } catch {
+    return 'desktop';
+  }
+}
+
+export function saveDeviceMode(mode: DeviceMode): void {
+  try {
+    localStorage.setItem(DEVICE_MODE_KEY, mode);
+  } catch {
+    // ignore quota / privacy errors
   }
 }
 

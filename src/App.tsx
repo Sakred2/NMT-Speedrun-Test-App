@@ -12,7 +12,7 @@ import UnderwaterOverlay from '@/components/UnderwaterOverlay';
 import RunBanner from '@/components/RunBanner';
 import RunSidebar from '@/components/RunSidebar';
 import { fetchQuestions } from '@/lib/openrouter';
-import { getApiKey, getSoundOn, saveSoundOn, recordBestRun } from '@/lib/storage';
+import { getApiKey, getSoundOn, saveSoundOn, recordBestRun, getDeviceMode, type DeviceMode } from '@/lib/storage';
 import { pickMockQuestions } from '@/data/mockQuestions';
 import { SUBJECTS, type Element } from '@/data/subjects';
 import { CustomSet, decodeSet, upsertSet } from '@/lib/customSets';
@@ -52,6 +52,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [soundOn, setSoundOn] = useState(getSoundOn);
+  const [deviceMode, setDeviceMode] = useState<DeviceMode>(getDeviceMode());
   const [editorInitialSet, setEditorInitialSet] = useState<CustomSet | null>(null);
   const [importedToast, setImportedToast] = useState<string | null>(null);
 
@@ -62,6 +63,12 @@ function App() {
 
   const activeSubject = SUBJECTS.find((s) => s.id === subject) ?? SUBJECTS[0];
   const activeElement: Element = activeSubject.element;
+  const mainWidthClass =
+    deviceMode === 'mobile'
+      ? 'max-w-[420px]'
+      : deviceMode === 'tablet'
+        ? 'max-w-4xl'
+        : 'max-w-6xl';
 
   const floodPct = Math.min(100, (elapsed / FLOOD_MAX_SECONDS) * 100);
   const flooded = screen === 'test' && elapsed >= FLOOD_MAX_SECONDS;
@@ -290,10 +297,12 @@ function App() {
       <SettingsModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
+        deviceMode={deviceMode}
+        onDeviceModeChange={setDeviceMode}
         onSaved={() => {}}
       />
 
-      <main className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${screen === 'test' ? 'max-w-5xl' : 'max-w-3xl'}`}>
+      <main className={`mx-auto px-4 py-6 sm:px-6 sm:py-8 ${mainWidthClass}`}>
         {screen === 'welcome' && (
           <WelcomeScreen
             subject={subject}
@@ -311,7 +320,7 @@ function App() {
         )}
 
         {screen === 'test' && questions[current] && (
-          <div className="run-layout">
+          <div className={`run-layout device-${deviceMode}`}>
             <div className={`run-panel fe-panel ${flooded ? 'uw-content-warp' : ''}`}>
               <div className="hazard-strip relative z-10 h-2 w-full" aria-hidden="true" />
               <div className="run-wall" aria-hidden="true" />
