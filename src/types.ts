@@ -1,6 +1,10 @@
 export type SubjectId =
   | 'english' | 'german' | 'polish' | 'history' | 'math'
-  | 'ukrainian' | 'biology' | 'chemistry' | 'geography';
+  | 'ukrainian' | 'biology' | 'chemistry' | 'geography'
+  | 'astronomy' | 'physics' | 'robotics' | 'psychology' | 'philosophy'
+  | 'programming' | 'ecology' | 'economics' | 'archaeology' | 'criminalistics'
+  | 'oceanology' | 'meteorology' | 'drafting' | 'engineering' | 'media-literacy'
+  | 'logic' | 'sociology' | 'financial-literacy' | 'art' | 'culinary';
 
 export interface Subject {
   id: SubjectId;
